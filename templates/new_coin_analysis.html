@@ -1,0 +1,294 @@
+{% extends 'base.html' %}
+{% block title %}Pre-Trade Checklist - Mayhem Edge{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Pre-Trade Checklist styles for robotic theme */
+    .checklist-container {
+        font-family: 'Orbitron', monospace;
+    }
+
+    h1 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 2.5rem;
+        background: linear-gradient(45deg, #00ff88, #00bfff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 2px;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .section {
+        background-color: #2a2a2a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .section::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background-color: #555;
+        transition: background-color 0.3s ease;
+    }
+
+    .section:hover::before {
+        background-color: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .section:hover {
+        background-color: #1e1e1e;
+        border-color: #00ff88;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    }
+
+    .section h2 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        color: #00ff88;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .sub-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .sub-section h3 {
+        font-family: 'Orbitron', monospace;
+        color: #00bfff;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+    }
+
+    .check-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .check-item input[type="checkbox"] {
+        transform: scale(1.2);
+        margin-right: 0.75rem;
+        accent-color: #00ff88;
+        filter: drop-shadow(0 0 3px rgba(0, 255, 136, 0.3));
+    }
+
+    .check-item input[type="checkbox"]:checked {
+        filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.7));
+        animation: pulse 0.5s ease;
+    }
+
+    .check-item label {
+        color: #b0b0b0;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.95rem;
+        cursor: pointer;
+        flex: 1;
+    }
+
+    .decision-tree {
+        background-color: #1e1e1e;
+        border: 2px solid #00ff88;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .decision-tree h3 {
+        color: #00ff88;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .tree-step {
+        background-color: #2a2a2a;
+        padding: 1rem;
+        margin-bottom: 0.5rem;
+        border-radius: 4px;
+        border-left: 4px solid #00bfff;
+    }
+
+    #readyButton {
+        width: 100%;
+        background: linear-gradient(45deg, #00ff88, #00bfff);
+        border: none;
+        color: #000;
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 1.2rem;
+        padding: 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        cursor: pointer;
+        margin-top: 2rem;
+    }
+
+    #readyButton:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+        transform: translateY(-2px);
+    }
+
+    #readyButton:disabled {
+        background: #555;
+        color: #666;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1.2); }
+        50% { transform: scale(1.4); }
+        100% { transform: scale(1.2); }
+    }
+
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        to {
+            text-shadow: 0 0 20px rgba(0, 191, 255, 0.7), 0 0 30px rgba(255, 0, 255, 0.5);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checklist-container">
+    <h1>Pre-Trade Checklist & Prediction Engine</h1>
+    <p style="text-align: center; color: #b0b0b0; margin-bottom: 2rem;">Layered analysis for 70-80% hit rate: Fundamentals (40%), On-Chain (30%), Technicals (30%). Backtest with 2025 data via CCXT/Python. Score projects pre-list; monitor real-time for pattern classification.</p>
+
+    <!-- Fundamental Analysis Section -->
+    <div class="section">
+        <h2>1. Fundamental Analysis (Pre-List Filter: 40% Weight)</h2>
+        <div class="sub-section">
+            <h3>Tokenomics Deep Dive</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Check vesting cliffs on TokenUnlocks.app (>10% Day 1 → Pattern 2 risk)</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>High team allocation (>20%) flags dumps</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Project Health</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Messari/CoinGecko: TVL growth, partnerships (Binance Labs → Pattern 4)</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Narrative fit? (AI/DeFi hot in 2025 → surge potential)</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Team/Compliance</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>LinkedIn/Dune: Dev activity; RugDoc for rugs</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>CEX-specific: Ethical apps (no paid listings → harder pumps)</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Scoring</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Score 1-10 (FDV/TVL <5x = green). Threshold: <6 → skip</label></div>
+        </div>
+    </div>
+
+    <!-- On-Chain Analysis Section -->
+    <div class="section">
+        <h2>2. On-Chain Analysis (Real-Time Origin Tracker: 30% Weight)</h2>
+        <div class="sub-section">
+            <h3>Whale Flows</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Arkham/Nansen: VC clusters selling → Pattern 2; inflows → 6</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Pre-list DEX volume for arb (Pattern 8)</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Liquidity Metrics</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Dexscreener (pre) + CEX books (post): Thin bids = dump risk</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>OI/funding rates on Bybit/Binance for cascades</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Holder Distribution</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Bubblemaps: 3+ wallets >5% = dump</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Post-list: Dev sells (Solscan if Solana)</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Alerts</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Whale Alert: >$1M transfers. Top 10 dump >5% Hour 1 → fade</label></div>
+        </div>
+    </div>
+
+    <!-- Technical Analysis Section -->
+    <div class="section">
+        <h2>3. Technical Analysis (Movement Confirmation: 30% Weight)</h2>
+        <div class="sub-section">
+            <h3>Chart Setups</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>TradingView 1m/5m: Volume profile for traps (high vol low = accum)</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>RSI >70 = dump; VWAP for arb fades</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>CEX Nuances</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Spot vs. perp: Negative funding = short bias (Pattern 9)</label></div>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Pre-list: Pump.fun/DEX trends predict gap</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Backtest Tool</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>Python (Pandas/TA-Lib): df['RSI'] = ta.RSI(df['close']); rsi >80 + vol_spike → dump</label></div>
+        </div>
+        <div class="sub-section">
+            <h3>Multi-Timeframe</h3>
+            <div class="check-item"><input type="checkbox" class="check-item"><label>1h entry, 4h trend. + LunarCrush sentiment for 85% match</label></div>
+        </div>
+    </div>
+
+    <!-- Decision Tree Section -->
+    <div class="decision-tree">
+        <h3>Quick Decision Tree for 99% Coverage</h3>
+        <div class="tree-step">
+            <strong>Step 1 (Pre-List):</strong> Fund score >7 + low unlocks? → Pattern 4/12 (buy dips). Else → screen bots/exploits.
+        </div>
+        <div class="tree-step">
+            <strong>Step 2 (Open Hour 1):</strong> Volume >5x + green closes? → 1/7/8 (wait trap). Red + thin book? → 2/5/10 (avoid/short).
+        </div>
+        <div class="tree-step">
+            <strong>Step 3 (Hour 2-24):</strong> On-chain inflows + breakout? → Accumulate. Bleed + neg funding? → Exit.
+        </div>
+        <div class="tree-step">
+            <strong>Edge Tip:</strong> Weekly: Pull 10 new listings from Binance/OKX APIs, classify retroactively.
+        </div>
+    </div>
+
+    <button id="readyButton" disabled>Checklist Complete - Proceed to Trade</button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const checkboxes = document.querySelectorAll('.check-item input[type="checkbox"]');
+const readyBtn = document.getElementById('readyButton');
+
+function updateReadyStatus() {
+    const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+    readyBtn.disabled = !allChecked;
+    if (allChecked) {
+        readyBtn.textContent = 'Checklist Complete - Proceed to Trade';
+    }
+}
+
+checkboxes.forEach(cb => cb.addEventListener('change', updateReadyStatus));
+updateReadyStatus();
+
+readyBtn.addEventListener('click', () => {
+    if (!readyBtn.disabled) {
+        alert('Pre-trade analysis complete! Apply to current listing for edge.');
+    }
+});
+</script>
+{% endblock %}

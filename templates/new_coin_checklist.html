@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% block title %}New Coin Checklist - Mayhem Edge{% endblock %}
+
+{% block extra_head %}
+<!-- Ensure Orbitron is loaded (already in base) -->
+<style>
+    /* Checklist-specific styles for robotic theme */
+    .checklist-container {
+        font-family: 'Orbitron', monospace;
+        max-width: 700px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 2.5rem;
+        background: linear-gradient(45deg, #00ff88, #00bfff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 2px;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .section-header {
+        font-family: 'Orbitron', monospace;
+        font-weight: 600;
+        color: #00bfff;
+        font-size: 1.3rem;
+        margin: 1.5rem 0 1rem 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        border-bottom: 1px solid #333;
+        padding-bottom: 0.5rem;
+    }
+
+    .step {
+        background-color: #2a2a2a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .step::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background-color: #555;
+        transition: background-color 0.3s ease;
+    }
+
+    .step.done::before {
+        background-color: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .step.done {
+        background-color: #1e1e1e;
+        border-color: #00ff88;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    }
+
+    h3 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        color: #00ff88;
+        margin-bottom: 0.5rem;
+        font-size: 1.1rem;
+    }
+
+    .info {
+        color: #b0b0b0;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.9rem;
+        margin: 0;
+        line-height: 1.4;
+    }
+
+    .tools {
+        font-size: 0.8rem;
+        color: #666;
+        margin-top: 0.25rem;
+    }
+
+    .check-item {
+        transform: scale(1.2);
+        margin-right: 0.5rem;
+        accent-color: #00ff88;
+        filter: drop-shadow(0 0 3px rgba(0, 255, 136, 0.3));
+    }
+
+    .check-item:checked {
+        filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.7));
+        animation: pulse 0.5s ease;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1.2); }
+        50% { transform: scale(1.4); }
+        100% { transform: scale(1.2); }
+    }
+
+    #progress {
+        width: 100%;
+        height: 8px;
+        background-color: #333;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        overflow: hidden;
+    }
+
+    #progress-bar {
+        height: 100%;
+        background: linear-gradient(45deg, #00ff88, #00bfff);
+        width: 0%;
+        transition: width 0.3s ease;
+    }
+
+    #readyButton {
+        width: 100%;
+        background: linear-gradient(45deg, #00ff88, #00bfff);
+        border: none;
+        color: #000;
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 1.2rem;
+        padding: 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+    }
+
+    #readyButton:hover:not(:disabled) {
+        box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+        transform: translateY(-2px);
+    }
+
+    #readyButton:disabled {
+        background: #555;
+        color: #666;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checklist-container">
+    <h1>New Coin Trading Checklist</h1>
+    <p style="text-align: center; color: #b0b0b0; margin-bottom: 2rem;">Complete all steps for 95% risk coverage. Run analyzer after Step 2.</p>
+
+    <div id="progress">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="section-header">Pre-Launch Fundamentals (Steps 1-3)</div>
+
+    <div class="step">
+        <h3>Step 1: Tokenomics & Coin Info</h3>
+        <p class="info">Verify FDV (<5x TVL), float (>20%), vesting cliffs (<10% Day 1), supply/inflation.</p>
+        <p class="tools">Tools: TokenUnlocks, CoinGecko</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="step">
+        <h3>Step 2: Team, Backers & Audits</h3>
+        <p class="info">Score team (1-10), check VCs/celeb backs, full audit status. Run pattern analyzer here.</p>
+        <p class="tools">Tools: Messari, Certik, LinkedIn</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="step">
+        <h3>Step 3: Narrative & Utility Fit</h3>
+        <p class="info">Does it match 2025 trends (AI/RWA/politics)? Unique edge vs. competitors?</p>
+        <p class="tools">Tools: DefiLlama, whitepaper</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="section-header">On-Chain & Liquidity (Steps 4-5)</div>
+
+    <div class="step">
+        <h3>Step 4: Holder Distribution & Whale Flows</h3>
+        <p class="info">Top 10 <30%, no clusters; inflows from rotations, no dev dumps (>20%).</p>
+        <p class="tools">Tools: Bubblemaps, Arkham/Lookonchain</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="step">
+        <h3>Step 5: Liquidity & Order Book Depth</h3>
+        <p class="info">LP >$500k, thick bids (2x asks); flag thin books or fake walls.</p>
+        <p class="tools">Tools: Dexscreener, CEX order books</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="section-header">Technical & Live Analysis (Steps 6-7)</div>
+
+    <div class="step">
+        <h3>Step 6: Pattern & Structure ID</h3>
+        <p class="info">Match to 12 patterns; spot CHoCH, FVG, OB, liquidity sweeps.</p>
+        <p class="tools">Tools: TradingView, your analyzer</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="step">
+        <h3>Step 7: Momentum Indicators</h3>
+        <p class="info">RSI (<80 overbought), MACD cross, funding rates (<0.01%), pre-launch DEX vol.</p>
+        <p class="tools">Tools: Coinglass, 1m/5m charts</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="section-header">Market/Sentiment & Execution (Steps 8-10)</div>
+
+    <div class="step">
+        <h3>Step 8: Social Hype & Sentiment</h3>
+        <p class="info">Mentions >5x avg, authentic KOLs; no paid shills or sentiment crash.</p>
+        <p class="tools">Tools: LunarCrush, X/Telegram search</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="step">
+        <h3>Step 9: Macro & External Catalysts</h3>
+        <p class="info">BTC >$80k? Altseason? No bear signals (Fear >70) or chain issues.</p>
+        <p class="tools">Tools: Fear & Greed, CoinMarketCap</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <div class="step">
+        <h3>Step 10: Risk Management Setup</h3>
+        <p class="info">Position <2% portfolio, SL at -20% (range low), TP at +50%; hedge if perps.</p>
+        <p class="tools">Tools: Journal/Excel for RR calc</p>
+        <input type="checkbox" class="check-item">
+    </div>
+
+    <button id="readyButton" disabled>Ready to Trade (0/10 Complete)</button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+const checkboxes = document.querySelectorAll('.check-item');
+const readyBtn = document.getElementById('readyButton');
+const progressBar = document.getElementById('progress-bar');
+
+function updateChecklist() {
+    const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+    const total = checkboxes.length;
+    const percentage = (checked / total) * 100;
+
+    checkboxes.forEach((cb, index) => {
+        const step = cb.closest('.step');
+        if (cb.checked) {
+            step.classList.add('done');
+        } else {
+            step.classList.remove('done');
+        }
+    });
+
+    progressBar.style.width = percentage + '%';
+    readyBtn.disabled = checked < total;
+    readyBtn.textContent = `Ready to Trade (${checked}/${total} Complete)`;
+
+    if (checked === total) {
+        readyBtn.style.background = 'linear-gradient(45deg, #ff00ff, #00ff88)';
+    }
+}
+
+checkboxes.forEach(cb => cb.addEventListener('change', updateChecklist));
+updateChecklist();
+
+readyBtn.addEventListener('click', () => {
+    if (!readyBtn.disabled) {
+        alert('Checklist complete! Proceed with trade—remember, no FOMO. Log your entry.');
+    }
+});
+</script>
+{% endblock %}

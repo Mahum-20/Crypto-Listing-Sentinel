@@ -1,0 +1,430 @@
+{% extends 'base.html' %}
+{% block title %}BTC-Target Coin Correlation Visualizer - Mayhem Edge{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Mayhem Edge robotic theme styles */
+    .guide-container {
+        font-family: 'Orbitron', monospace;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 2.5rem;
+        background: linear-gradient(45deg, #00ff88, #00bfff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 2px;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .section {
+        background-color: #2a2a2a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .section::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 5px;
+        background-color: #555;
+        transition: background-color 0.3s ease;
+    }
+
+    .section:hover::before {
+        background-color: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+    }
+
+    .section:hover {
+        background-color: #1e1e1e;
+        border-color: #00ff88;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+    }
+
+    .section h2 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        color: #00ff88;
+        margin-bottom: 1rem;
+        font-size: 1.5rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        background-color: #1a1a1a;
+        border-radius: 4px;
+        border-left: 4px solid #00bfff;
+    }
+
+    .form-group label {
+        font-family: 'Orbitron', monospace;
+        color: #00bfff;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        letter-spacing: 0.5px;
+        display: block;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        max-width: 300px;
+        padding: 0.75rem;
+        background-color: #111;
+        border: 1px solid #333;
+        border-radius: 4px;
+        color: #e0e0e0;
+        font-family: 'Orbitron', monospace;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        outline: none;
+        border-color: #00ff88;
+        box-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+    }
+
+    .submit-btn {
+        background: linear-gradient(45deg, #00ff88, #00bfff);
+        border: none;
+        padding: 1rem 2rem;
+        border-radius: 4px;
+        color: #111;
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: block;
+        margin: 0 auto;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 255, 136, 0.4);
+    }
+
+    .intro-text {
+        color: #b0b0b0;
+        margin-bottom: 2rem;
+        text-align: center;
+        font-size: 0.95rem;
+        line-height: 1.5;
+    }
+
+    .viz-container {
+        background-color: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        transition: all 0.3s ease;
+    }
+
+    .viz-container:hover {
+        border-color: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
+    }
+
+    .viz-container h3 {
+        font-family: 'Orbitron', monospace;
+        color: #00bfff;
+        margin-bottom: 1rem;
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    .error {
+        background-color: #1e1e1e;
+        border: 1px solid #ff4444;
+        border-radius: 4px;
+        padding: 1rem;
+        color: #ff6666;
+        font-family: 'Orbitron', monospace;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+
+    .tip {
+        background-color: #1e1e1e;
+        border: 1px solid #00ff88;
+        border-radius: 4px;
+        padding: 1rem;
+        margin-top: 1rem;
+        color: #b0b0b0;
+        font-size: 0.9rem;
+    }
+
+    .tip strong {
+        color: #00ff88;
+    }
+
+    .corr-label {
+        color: #00ff88;
+        font-weight: 700;
+    }
+
+    /* Loading overlay styles */
+    #loading-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Orbitron', monospace;
+    }
+
+    .loading-spinner {
+        border: 4px solid #333;
+        border-top: 4px solid #00ff88;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+        margin-bottom: 1rem;
+    }
+
+    .loading-text {
+        color: #00ff88;
+        font-size: 1.2rem;
+        text-align: center;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        to {
+            text-shadow: 0 0 20px rgba(0, 191, 255, 0.7), 0 0 30px rgba(255, 0, 255, 0.5);
+        }
+    }
+
+    .back-link {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .back-link a {
+        color: #00ff88;
+        text-decoration: none;
+        font-family: 'Orbitron', monospace;
+        font-weight: 600;
+    }
+
+    .back-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* Plotly integration: Ensure plots fit theme */
+    .plotly-graph-div {
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .guide-container {
+            padding: 1rem;
+        }
+        h1 {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="guide-container">
+    <h1>BTC-Target Coin Correlation Visualizer</h1>
+    <p class="intro-text">Visualize rolling correlations between BTC and your target coin across trading styles. Powered by real-time data—unlock patterns for smarter entries/exits in volatile markets.</p>
+
+    <div class="section">
+        <h2>Configure Analysis</h2>
+        <form method="post" action="{% url 'correlation_visualizer' %}" id="analysis-form">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="coin_symbol">Target Coin (e.g., ETH, SOL):</label>
+                <input type="text" id="coin_symbol" name="coin_symbol" value="{{ coin_symbol|default:'ETH' }}" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="style">Trading Style:</label>
+                <select id="style" name="style" required>
+                    {% for value, label in style_options %}
+                        <option value="{{ value }}" {% if value == style|default:'day' %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="submit-btn">Analyze Correlation</button>
+        </form>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <div class="tip">
+            <strong>Mayhem Tip:</strong> High correlation (>0.8) means BTC dumps drag your alt—tighten stops. Low (<0.3) signals independent plays for diversification.
+        </div>
+    </div>
+
+    <div id="analysis-results" class="analysis-section">
+        {% if current_corr %}
+            <div class="section">
+                <h2>Analysis for {{ coin_symbol }} vs BTC ({{ timeframe|upper }} Timeframe)</h2>
+                <p style="color: #b0b0b0; margin-bottom: 1rem;">
+                    Current Correlation: <strong style="color: #00ff88;">{{ current_corr|floatformat:3 }}</strong> (
+                    {% if current_corr > 0.7 %}
+                        <span class="corr-label">Strong Positive</span>
+                    {% elif current_corr < -0.3 %}
+                        <span class="corr-label">Negative</span>
+                    {% else %}
+                        <span class="corr-label">Neutral</span>
+                    {% endif %}
+                    )
+                </p>
+                
+                <div class="viz-container">
+                    <h3>Gauge: Current Correlation Strength</h3>
+                    <div>{{ gauge_plot|safe }}</div>
+                </div>
+                
+                <div class="viz-container">
+                    <h3>Rolling Correlation Over Time</h3>
+                    <div>{{ corr_plot|safe }}</div>
+                </div>
+                
+                <div class="viz-container">
+                    <h3>Price Movements: BTC vs {{ coin_symbol }}</h3>
+                    <div>{{ price_plot|safe }}</div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="back-link">
+        <a href="{% url 'new_coin_analyzer' %}">← Back to Analyzer</a> | <a href="{% url 'new_coin_checklist' %}">Checklist Page</a>
+    </div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay">
+    <div style="text-align: center;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Analyzing correlation... This may take a moment as we fetch real-time data.</div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('analysis-form');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            // Update button and show loading
+            submitBtn.textContent = 'Analyzing...';
+            submitBtn.disabled = true;
+            loadingOverlay.style.display = 'flex';
+
+            const formData = new FormData(form);
+            const actionUrl = form.action;
+
+            try {
+                const response = await fetch(actionUrl, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                if (response.ok) {
+                    const contentType = response.headers.get('content-type');
+                    if (contentType && contentType.includes('application/json')) {
+                        // Handle JSON error response from view
+                        const data = await response.json();
+                        if (data.error) {
+                            let errorDiv = document.querySelector('.error');
+                            if (!errorDiv) {
+                                errorDiv = document.createElement('div');
+                                errorDiv.className = 'error';
+                                form.after(errorDiv);
+                            }
+                            errorDiv.textContent = data.error;
+                            // Hide previous results if any
+                            const resultsDiv = document.getElementById('analysis-results');
+                            if (resultsDiv) resultsDiv.innerHTML = '';
+                        }
+                    } else {
+                        // Assume full HTML response; replace the entire page content seamlessly
+                        const html = await response.text();
+                        document.open();
+                        document.write(html);
+                        document.close();
+                    }
+                } else {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Analysis request failed:', error);
+                // Fallback: Show generic error
+                let errorDiv = document.querySelector('.error');
+                if (!errorDiv) {
+                    errorDiv = document.createElement('div');
+                    errorDiv.className = 'error';
+                    form.after(errorDiv);
+                }
+                errorDiv.textContent = 'An unexpected error occurred. Please try again.';
+                // Hide previous results
+                const resultsDiv = document.getElementById('analysis-results');
+                if (resultsDiv) resultsDiv.innerHTML = '';
+            } finally {
+                // Reset button (only if not replacing page)
+                if (document.body.contains(submitBtn)) {
+                    submitBtn.textContent = 'Analyze Correlation';
+                    submitBtn.disabled = false;
+                }
+                loadingOverlay.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

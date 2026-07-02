@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+
+{% block title %}Entry Strategy After Prediction{% endblock %}
+
+{% block content %}
+<!-- Strategy Page Start -->
+<div class="strategy-page container mx-auto px-4 py-12">
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+                Entry Strategy After Prediction
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
+                Your analyzer gives a solid "go up" signal, but dips (e.g., liquidity hunts) are common in new coins. 
+                Wait for confirmation before entering—don't chase the prediction blindly. Aim for 2-3 aligning signals from below.
+            </p>
+            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
+                <p class="text-blue-800 dark:text-blue-200 font-medium">
+                    <i class="fas fa-lightbulb text-blue-500 mr-2"></i>
+                    This is your comprehensive strategy to turn predictions into profitable trades. Track 5-10 past predictions to refine—backtest entries.
+                </p>
+            </div>
+        </header>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                <i class="fas fa-chart-line text-blue-500 mr-3"></i>
+                1. Technical Confirmation (Quick Check)
+            </h2>
+            <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Support Bounce:</strong> Enter when price hits a key support (e.g., launch price or 20-30% dip) and bounces with volume spike.
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>RSI Oversold:</strong> Buy if RSI (14) &lt;30 (oversold) and starts rising.
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Price Action Shift:</strong> From "Immediate Dump" to "Small Pump" or "Sideways" on your analyzer—enter on breakout above recent high.
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                <i class="fas fa-link text-purple-500 mr-3"></i>
+                2. On-Chain Signals (Deeper Dive)
+            </h2>
+            <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Whale Accumulation:</strong> No more "Whale Inflows? Yes" or "Dev Dump % >5%"; watch for holder growth (tools like DexScreener).
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Liquidity Stabilize:</strong> Depth >$100K USD and "Holders Concentrated? No" (less risk of rugs).
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Bot Activity Drop:</strong> "High Bot TX? No" to avoid fake volume.
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                <i class="fas fa-heart text-pink-500 mr-3"></i>
+                3. Sentiment & Macro (Final Green Light)
+            </h2>
+            <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Hype Build:</strong> Social mentions up 2x+ (Medium/High level) without negativity.
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Macro Align:</strong> "Macro Bullish? Yes" (e.g., BTC stable/up)—avoid entries in red markets.
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-arrow-up text-green-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Competitors:</strong> Low overlap; if high, wait for unique edge (e.g., better utility score).
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center">
+                <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                Risk Rules (Always)
+            </h2>
+            <ul class="space-y-4 text-gray-700 dark:text-gray-300">
+                <li class="flex items-start">
+                    <i class="fas fa-shield-alt text-red-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Position Size:</strong> 1-2% of portfolio max.
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-shield-alt text-red-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Stop-Loss:</strong> 10-20% below entry (trail up on gains).
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-shield-alt text-red-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Timeframe:</strong> Enter within 24-72 hrs post-launch; if no signals, skip.
+                    </div>
+                </li>
+                <li class="flex items-start">
+                    <i class="fas fa-shield-alt text-red-500 mt-1 mr-3"></i>
+                    <div>
+                        <strong>Tools:</strong> Use TradingView for charts, Dune Analytics for on-chain, LunarCrush for sentiment.
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <footer class="text-center mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
+            <p class="text-gray-600 dark:text-gray-300">
+                This strategy turns "okay" predictions into profitable trades. Always DYOR and trade responsibly.
+            </p>
+        </footer>
+    </div>
+</div>
+<!-- Strategy Page End -->
+{% endblock %}

@@ -1,0 +1,297 @@
+{% extends 'base.html' %}
+{% block title %}Advanced Coin Analyzer - Mayhem Edge{% endblock %}
+
+{% block extra_head %}
+<style>
+    /* Enhanced styles for expanded form */
+    .analyzer-container {
+        font-family: 'Orbitron', monospace;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    h1 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 2.5rem;
+        background: linear-gradient(45deg, #00ff88, #00bfff, #ff00ff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 2rem;
+        letter-spacing: 2px;
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    .form-section {
+        background-color: #1a1a1a;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        border-left: 4px solid #00ff88;
+    }
+
+    .form-section h2 {
+        color: #00ff88;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+
+    .form-group {
+        margin-bottom: 1rem;
+        display: inline-block;
+        width: 48%;
+        vertical-align: top;
+    }
+
+    .form-group.full-width {
+        width: 100%;
+    }
+
+    label {
+        display: block;
+        font-family: 'Orbitron', monospace;
+        font-weight: 600;
+        color: #00ff88;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: #2a2a2a;
+        border: 1px solid #333;
+        border-radius: 4px;
+        color: #e0e0e0;
+        font-family: 'Orbitron', monospace;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+        outline: none;
+        border-color: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
+        background-color: #1e1e1e;
+    }
+
+    button {
+        width: 100%;
+        background: linear-gradient(45deg, #00ff88, #00bfff);
+        border: none;
+        color: #000;
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        font-size: 1.2rem;
+        padding: 1rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+
+    button:hover {
+        box-shadow: 0 6px 20px rgba(0, 255, 136, 0.5);
+        transform: translateY(-2px);
+    }
+
+    .result {
+        display: {% if show_result %}block{% else %}none{% endif %};
+        margin-top: 2rem;
+        padding: 1.5rem;
+        border-radius: 8px;
+        background-color: #1e1e1e;
+        border: 2px solid #00ff88;
+        box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+        animation: fadeIn 0.5s ease;
+    }
+
+    .result h3 {
+        font-family: 'Orbitron', monospace;
+        font-weight: 700;
+        color: #00ff88;
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .result p {
+        color: #b0b0b0;
+        font-family: 'Orbitron', monospace;
+        font-size: 1rem;
+        margin: 0.5rem 0;
+    }
+
+    .result strong {
+        color: #e0e0e0;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
+        }
+        to {
+            text-shadow: 0 0 20px rgba(0, 191, 255, 0.7), 0 0 30px rgba(255, 0, 255, 0.5);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="analyzer-container">
+    <h1>Advanced Coin Analyzer</h1>
+    <p style="text-align: center; color: #b0b0b0;">Input all key factors for comprehensive analysis</p>
+
+    <form method="post" action="{% url 'new_coin_analyzer' %}">
+        {% csrf_token %}
+
+        <!-- Fundamentals Section -->
+        <div class="form-section">
+            <h2>Fundamentals (40% Weight)</h2>
+            <div class="form-group">
+                <label for="fdv">FDV (USD)</label>
+                <input type="number" id="fdv" name="fdv" placeholder="e.g. 100000000" value="{% if inputs.fdv %}{{ inputs.fdv }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="vesting_cliff">Vesting Cliff %</label>
+                <input type="number" id="vesting_cliff" name="vesting_cliff" placeholder="e.g. 15" value="{% if inputs.vesting_cliff %}{{ inputs.vesting_cliff }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="team_score">Team Score (1-10)</label>
+                <input type="number" min="1" max="10" id="team_score" name="team_score" placeholder="e.g. 8" value="{% if inputs.team_score %}{{ inputs.team_score }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="utility_score">Utility Score (1-10)</label>
+                <input type="number" min="1" max="10" id="utility_score" name="utility_score" placeholder="e.g. 7" value="{% if inputs.utility_score %}{{ inputs.utility_score }}{% endif %}">
+            </div>
+            <div class="form-group full-width">
+                <label for="audit_status">Audit Status</label>
+                <select id="audit_status" name="audit_status">
+                    <option value="full" {% if inputs.audit_status == 'full' %}selected{% endif %}>Full Audit</option>
+                    <option value="partial" {% if inputs.audit_status == 'partial' %}selected{% endif %}>Partial Audit</option>
+                    <option value="none" {% if inputs.audit_status == 'none' %}selected{% endif %}>No Audit</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- On-Chain Section -->
+        <div class="form-section">
+            <h2>On-Chain (30% Weight)</h2>
+            <div class="form-group">
+                <label for="holders_concentrated">Holders Concentrated?</label>
+                <select id="holders_concentrated" name="holders_concentrated">
+                    <option value="yes" {% if inputs.holders_concentrated %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if not inputs.holders_concentrated %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="liquidity_depth">Liquidity Depth (USD)</label>
+                <input type="number" id="liquidity_depth" name="liquidity_depth" placeholder="e.g. 750000" value="{% if inputs.liquidity_depth %}{{ inputs.liquidity_depth }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="whale_inflows">Whale Inflows?</label>
+                <select id="whale_inflows" name="whale_inflows">
+                    <option value="yes" {% if inputs.whale_inflows %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if not inputs.whale_inflows %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dev_dump">Dev Dump %</label>
+                <input type="number" id="dev_dump" name="dev_dump" placeholder="e.g. 5" value="{% if inputs.dev_dump %}{{ inputs.dev_dump }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="bot_tx_high">High Bot TX?</label>
+                <select id="bot_tx_high" name="bot_tx_high">
+                    <option value="yes" {% if inputs.bot_tx_high %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if not inputs.bot_tx_high %}selected{% endif %}>No</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Technical Section -->
+        <div class="form-section">
+            <h2>Technical (20% Weight)</h2>
+            <div class="form-group full-width">
+                <label for="initialAction">Initial Price Action</label>
+                <select id="initialAction" name="initialAction">
+                    <option value="pump" {% if inputs.initialAction == 'pump' %}selected{% endif %}>Massive Pump</option>
+                    <option value="dump" {% if inputs.initialAction == 'dump' %}selected{% endif %}>Immediate Dump</option>
+                    <option value="sideways" {% if inputs.initialAction == 'sideways' %}selected{% endif %}>Sideways</option>
+                    <option value="smallpump" {% if inputs.initialAction == 'smallpump' %}selected{% endif %}>Small Pump</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="rsi">RSI (14-period)</label>
+                <input type="number" min="0" max="100" id="rsi" name="rsi" placeholder="e.g. 75" value="{% if inputs.rsi %}{{ inputs.rsi }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="neg_funding">Negative Funding?</label>
+                <select id="neg_funding" name="neg_funding">
+                    <option value="yes" {% if inputs.neg_funding %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if not inputs.neg_funding %}selected{% endif %}>No</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Market/Sentiment Section -->
+        <div class="form-section">
+            <h2>Market/Sentiment (10% Weight)</h2>
+            <div class="form-group">
+                <label for="hype">Social Hype Level</label>
+                <select id="hype" name="hype">
+                    <option value="high" {% if inputs.hype == 'high' %}selected{% endif %}>High</option>
+                    <option value="medium" {% if inputs.hype == 'medium' %}selected{% endif %}>Medium</option>
+                    <option value="low" {% if inputs.hype == 'low' %}selected{% endif %}>Low</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="social_mentions">Social Mentions Multiplier</label>
+                <input type="number" id="social_mentions" name="social_mentions" placeholder="e.g. 6" value="{% if inputs.social_mentions %}{{ inputs.social_mentions }}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label for="macro_bullish">Macro Bullish?</label>
+                <select id="macro_bullish" name="macro_bullish">
+                    <option value="yes" {% if inputs.macro_bullish %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if not inputs.macro_bullish %}selected{% endif %}>No</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="competitor_overlap">Competitor Overlap?</label>
+                <select id="competitor_overlap" name="competitor_overlap">
+                    <option value="yes" {% if inputs.competitor_overlap %}selected{% endif %}>Yes</option>
+                    <option value="no" {% if not inputs.competitor_overlap %}selected{% endif %}>No</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit">Run Advanced Analysis</button>
+    </form>
+
+    {% if show_result %}
+    <div id="result" class="result">
+        <h3>Detected Pattern:</h3>
+        <p><strong>{{ pattern }}</strong></p>
+        <h3>Recommended Action:</h3>
+        <p>{{ advice }}</p>
+        <h3>Predicted Next Movement:</h3>
+        <p><strong>{{ next_move }}</strong></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
