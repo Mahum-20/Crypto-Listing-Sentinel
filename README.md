@@ -1,211 +1,148 @@
-# Crypto Market Intelligence & Pattern Analysis System (Django)
+# CoinIntel - Crypto Trading Journal & Market Intelligence System
 
-An advanced **AI-inspired crypto analysis platform** built with Django that helps traders:
-- Detect recurring market patterns in new coins
-- Analyze token fundamentals + on-chain behavior
-- Measure BTC correlation across timeframes
-- Visualize market structure using interactive charts
+An intelligent, multi-user **Crypto Trading Journal & Market Analysis Platform** built with **Django**, **CCXT**, **Pandas**, and **Plotly**.
 
-This project combines **quant logic + behavioral market analysis + data visualization** into a single intelligent trading toolkit.
+CoinIntel combines personal trade logging, emotional psychology auditing, pattern win-rate matrixes, and live exchange data (BTC correlation & new coin evaluation) into a clean, modern web application.
 
 ---
 
-##  Key Features
+## 🌟 Key Features
 
-### New Coin Pattern Intelligence Engine
-A rule-based classification system that identifies **12+ recurring crypto market behaviors**, such as:
-
-- Pump → Dump → Accumulation cycles
-- VC / insider unlock dumps
-- Slow bleed low-demand assets
-- Institutional accumulation phases
-- Fake pump & rug patterns
-- Narrative rotation surges
-- Futures-driven liquidations
-- Liquidity trap reversals
-
-Each pattern includes:
-- Market structure classification
-- Indicator-based scoring system
-- Actionable trading advice
-- Probabilistic next-move prediction
+### 🔐 1. Multi-User Authentication & Security
+- **Email & Username Registration**: Account signup requiring validated email addresses.
+- **Dual Sign In**: Log in using either registered **Username** or **Email Address**.
+- **Forgot Password Workflow**: Complete 4-step password reset workflow (`/password-reset/`).
+- **Account & Risk Preferences**: Configure account starting capital ($), max risk per trade (%), account tier badges, and custom avatars.
+- **Multi-Tenant Data Isolation**: Every trader's trade entries, retrospective notes, and metrics are strictly private and isolated.
 
 ---
 
-### Smart Coin Analyzer
-A structured input engine that evaluates:
-
-#### Fundamentals
-- FDV (Fully Diluted Valuation)
-- Team strength score
-- Utility score
-- Audit status
-- Vesting pressure
-
-#### On-Chain Behavior
-- Whale inflows
-- Holder concentration
-- Liquidity depth
-- Developer sell pressure
-- Bot transaction activity
-
-#### Technical Conditions
-- RSI levels
-- Initial price action (pump/dump/sideways)
-- Funding rate signals
-- Market structure bias
-
-#### Sentiment Layer
-- Social hype level
-- Mentions multiplier
-- Macro bullish sentiment
-- Narrative strength
-
-Outputs:
-- Detected market pattern
-- Trading advice
-- Expected next move
-- Confidence-adjusted signal strength
+### 📓 2. Personal Trade Journal Engine
+- **Automated Trade Metrics**: Auto-calculates Realized PnL ($), ROI (%), and executed vs planned Risk:Reward (**R-Multiple**) for Long and Short positions.
+- **Advanced Trade Log Management**: Search and filter trade entries by symbol, status (*Win, Loss, Open, Breakeven*), or mindset state.
+- **Detailed Trade Reports**: Deep-dive into trade parameters, entry/exit prices, stop loss targets, retrospective notes, and chart screenshot embeds.
+- **Shareable Trade Cards**: Generate clean summary cards for Twitter/X, Discord, or Telegram sharing.
+- **One-Click Demo Data Generator**: Instantly populate realistic sample trade entries on new accounts for immediate analytics exploration.
 
 ---
 
-### BTC Correlation Visualizer
-A professional-grade correlation analysis tool using **CCXT + Pandas + Plotly**
-
-#### Features:
-- BTC vs Altcoin correlation tracking
-- Multiple trading styles:
-  - Scalper (1H)
-  - Day Trader (4H)
-  - Swing Trader (1D)
-  - Positional (1W)
-
-#### Visual Outputs:
-- Rolling correlation chart
-- Normalized price comparison
-- Gauge indicator for current correlation strength
-
-#### Core Metrics:
-- Rolling correlation coefficient
-- Price return alignment
-- Market dependency detection
+### 🧠 3. Trading Psychology & Mindset Audit
+- **Emotional Mistake Audit**: Quantifies exact dollar losses tied to emotional trading habits (*FOMO, Revenge Trading, Over-leveraging, Panic Cuts*).
+- **Disciplined Execution Rate**: Calculates your percentage of plan-compliant trade executions.
+- **Emotional Tilt Warning Banner**: Detects consecutive emotional losses and suggests a mandatory cooldown break away from the screens.
 
 ---
 
-### Interactive Market Tools
-Additional utilities for crypto research:
-
-- New coin checklist guide
-- Pattern breakdown explorer
-- Strategy documentation pages
-- Structured coin analysis workflow
+### 💡 4. Strategy Patterns & Pre-Trade Setup Evaluator
+- **12-Pattern Win-Rate Matrix**: Maps your logged trades against 12 recurring crypto market behaviors (Liquidity Traps, VC Dumps, Accumulation breakouts) to reveal your personal win-rate and expectancy per setup.
+- **Pre-Trade Setup Evaluator**: Input coin metrics (FDV, Team score, Utility, RSI, Whale inflows, Audit status) to get an AI Setup Grade (**A+ to F**), win probability %, and safe max position risk BEFORE placing real capital.
 
 ---
 
-## Tech Stack
+### 📊 5. Quantitative Performance Analytics
+- **Equity Growth Curve**: Interactive Plotly time-series chart showing account balance growth over time.
+- **Win/Loss Ratio Distribution**: Donut charts and execution summary metrics.
 
-- **Backend:** Django (Python)
+---
+
+### 📈 6. Live Crypto Market Tools
+- **BTC Correlation Tool**: Fetches live Binance OHLCV data via CCXT, computing rolling correlation gauge indicators, correlation trend charts, and normalized price path comparisons across Scalper (1H), Day (4H), Swing (1D), and Positional (1W) timeframes.
+- **Smart Coin Evaluator**: Evaluates new listed coin fundamentals, on-chain whale activity, and dump risk.
+- **Guides & Checklists**: Reference documentation for 12 Market Patterns, New Coin Launch Checklist, and Strategy Manual.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Backend Framework:** Python 3.12+, Django 5
+- **Market Data API:** CCXT (Binance live OHLCV data)
 - **Data Engine:** Pandas, NumPy
-- **Market Data API:** CCXT (Binance)
-- **Visualization:** Plotly (interactive charts)
-- **Frontend:** Django Templates (HTML/CSS)
-- **Charts:** Plotly subplots + gauge indicators
+- **Interactive Visualizations:** Plotly (Subplots, Gauges, Equity Curves)
+- **Frontend UI:** HTML5, CSS3, Bootstrap 5, Bootstrap Icons, Inter Typography
+- **Database:** SQLite3 (development / production configurable)
 
 ---
 
-## System Design Philosophy
+## 📂 Project Structure
 
-This project is built on one core idea:
-
-> “Crypto markets are not random — they are repeating behavioral patterns driven by liquidity, sentiment, and structure.”
-
-Instead of relying on indicators alone, this system blends:
-- Market microstructure
-- Behavioral finance
-- On-chain heuristics
-- Statistical correlation analysis
-
----
-
-## Project Structure
-
-
-trading/
+```text
+CoinIntel/
 │
-├── views.py # Core logic (patterns, analyzer, correlation)
-├── patterns (list) # Market behavior classification engine
-├── templates/
-│ ├── index.html
-│ ├── new_coin_analyzer.html
-│ ├── new_coin_patterns.html
-│ ├── new_coin_analysis.html
-│ ├── new_coin_strategy.html
-│ └── correlation_visualizer.html
-
-
----
-
-## Pattern Engine (Core Logic)
-
-The system classifies coins into patterns like:
-
-- **Slow Bleed / Low Demand**
-- **Pump → Dump → Accumulation**
-- **Liquidity Trap (V-shape recovery)**
-- **Institutional Accumulation**
-- **Rug / Fake Pump Behavior**
-- **Narrative Rotation Pumps**
-
-Each pattern is derived using weighted signals from:
-- Fundamentals (40%)
-- On-chain data (30%)
-- Technical indicators (20%)
-- Market sentiment (10%)
-
----
-
-## Correlation Engine (How it works)
-
-1. Fetches OHLCV data from Binance via CCXT
-2. Aligns BTC + selected coin time series
-3. Computes:
-   - Percentage returns
-   - Rolling correlation (window-based)
-4. Visualizes:
-   - Correlation strength over time
-   - Price normalization comparison
+├── manage.py                   # Django management script
+├── db.sqlite3                  # SQLite database
+├── requirements.txt            # Python dependencies
+├── README.md                   # Project documentation
+│
+├── NewCoinSetup/               # Django Project Configuration
+│   ├── settings.py             # App settings, DB, static files, Email backend
+│   ├── urls.py                 # Main URL router
+│   ├── wsgi.py                 # WSGI application entrypoint
+│   └── asgi.py                 # ASGI application entrypoint
+│
+├── NewCoinSetupApp/            # Main Application App
+│   ├── models.py               # UserProfile, TradeEntry, TradeChecklist models
+│   ├── views.py                # Journal CRUD, Psychology Audit, Pattern Matrix, CCXT Correlation
+│   ├── forms.py                # CustomUserCreationForm, EmailOrUsernameAuthenticationForm
+│   ├── urls.py                 # App URL patterns & password reset routes
+│   ├── tests.py                # Automated unit test suite (6 passing tests)
+│   └── admin.py                # Django Admin registration
+│
+├── templates/                  # HTML Templates
+│   ├── base.html               # Clean, single-line responsive navbar & footer
+│   ├── index.html              # Landing page featuring upfront BTC Correlation & Coin Evaluator
+│   ├── registration/           # Auth templates (login, signup, profile, password reset flow)
+│   └── journal/                # Journal templates (dashboard, trade_list, trade_form, trade_detail, fomo_shield, pattern_edge, analytics)
+│
+└── static/                     # Static Assets
+    ├── css/
+    ├── js/
+    └── img/
+        └── favicon.svg         # SVG Favicon matching brand logo
+```
 
 ---
 
-## Key Insights This Project Provides
+## ⚙️ Setup & Installation Instructions
 
-- Whether a coin is **BTC-dependent or independent**
-- Whether a coin is in **accumulation or distribution phase**
-- Whether hype is **organic or bot-driven**
-- Whether market structure is **healthy or manipulated**
-- Whether a setup is **high probability or noise**
-
----
-
-## Future Enhancements
-
-- AI-based pattern classifier (ML model upgrade)
-- Real-time WebSocket price streaming
-- Backtesting engine for detected patterns
-- Wallet tracking for whale detection
-- Signal alert system (Telegram/Discord)
-- TradingView integration for overlays
-
----
-
-## Setup Instructions
-
+### 1. Clone Repository & Setup Virtual Environment
 ```bash
-git clone https://github.com/your-username/crypto-intelligence-system.git
-cd crypto-intelligence-system
+git clone https://github.com/your-username/CoinIntel.git
+cd CoinIntel
 
+# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
 
+# Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# Linux/macOS:
+source venv/bin/activate
+```
+
+### 2. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Run Database Migrations
+```bash
+python manage.py makemigrations
 python manage.py migrate
+```
+
+### 4. Run Automated Unit Tests
+```bash
+python manage.py test
+```
+
+### 5. Launch Development Server
+```bash
 python manage.py runserver
+```
+
+Open your browser and navigate to `http://127.0.0.1:8000/`.
+
+---
+
+## 📄 License
+This project is open-source and available under the [MIT License](LICENSE).
