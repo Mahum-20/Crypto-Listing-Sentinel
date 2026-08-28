@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Performance Analytics | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-dark mb-1">
+            <i class="bi bi-bar-chart-line text-primary me-2"></i> Performance Analytics
+        </h2>
+        <p class="text-secondary mb-0">Visual equity growth curve and win/loss breakdown.</p>
+    </div>
+</div>
+
+<!-- ================= EQUITY CURVE CHART ================= -->
+<div class="card card-clean p-4 mb-4 border-0 shadow-sm">
+    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-graph-up text-success me-2"></i> Account Equity Growth Curve</h5>
+    <div class="w-100">
+        {{ equity_chart|safe }}
+    </div>
+</div>
+
+<!-- ================= WIN / LOSS DONUT CHART ================= -->
+<div class="row g-4 mb-4">
+    <div class="col-md-6">
+        <div class="card card-clean p-4 h-100 border-0 shadow-sm">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-pie-chart text-primary me-2"></i> Win / Loss Ratio</h5>
+            <div class="w-100 text-center">
+                {{ win_loss_chart|safe }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card card-clean p-4 h-100 border-0 shadow-sm">
+            <h5 class="fw-bold text-dark mb-3"><i class="bi bi-check2-circle text-warning me-2"></i> Execution Summary</h5>
+            <ul class="list-group list-group-flush mt-3">
+                <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between py-3 fs-5">
+                    <span class="text-secondary">Total Closed Trades:</span>
+                    <span class="fw-bold">{{ total_closed }}</span>
+                </li>
+                <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between py-3 fs-5">
+                    <span class="text-secondary">Winning Trades:</span>
+                    <span class="fw-bold text-success">{{ win_count }}</span>
+                </li>
+                <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between py-3 fs-5">
+                    <span class="text-secondary">Losing Trades:</span>
+                    <span class="fw-bold text-danger">{{ loss_count }}</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

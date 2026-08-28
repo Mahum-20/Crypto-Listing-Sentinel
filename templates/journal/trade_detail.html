@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title %}Trade Details - {{ trade.symbol }} | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h2 class="fw-bold text-dark mb-1">
+                    {{ trade.symbol }} 
+                    <span class="badge {% if trade.trade_type == 'LONG' %}bg-success{% else %}bg-danger{% endif %} bg-opacity-10 text-{% if trade.trade_type == 'LONG' %}success{% else %}danger{% endif %} border border-{% if trade.trade_type == 'LONG' %}success{% else %}danger{% endif %} fs-6 ms-2">
+                        {{ trade.trade_type }} {{ trade.leverage }}x
+                    </span>
+                </h2>
+                <p class="text-secondary mb-0">Logged on {{ trade.created_at|date:"F d, Y at H:i" }}</p>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="button" class="btn btn-primary-clean btn-sm" data-bs-toggle="modal" data-bs-target="#shareCardModal">
+                    <i class="bi bi-card-heading me-1"></i> Trade Summary Card
+                </button>
+                <a href="{% url 'trade_edit' trade.id %}" class="btn btn-outline-clean btn-sm"><i class="bi bi-pencil"></i> Edit</a>
+                <a href="{% url 'trade_delete' trade.id %}" class="btn btn-outline-danger btn-sm"><i class="bi bi-trash"></i> Delete</a>
+                <a href="{% url 'trade_list' %}" class="btn btn-outline-clean btn-sm"><i class="bi bi-arrow-left"></i> Logs</a>
+            </div>
+        </div>
+
+        <!-- Metric Grid Cards -->
+        <div class="row g-3 mb-4">
+            <div class="col-6 col-md-3">
+                <div class="card card-clean p-3 text-center border-0 shadow-sm border-start border-4 border-primary">
+                    <span class="text-secondary small fw-medium">Trade Status</span>
+                    <h4 class="fw-bold mb-0 mt-1">
+                        {% if trade.status == 'CLOSED_WIN' %}
+                            <span class="text-success">WIN</span>
+                        {% elif trade.status == 'CLOSED_LOSS' %}
+                            <span class="text-danger">LOSS</span>
+                        {% elif trade.status == 'OPEN' %}
+                            <span class="text-primary">OPEN</span>
+                        {% else %}
+                            <span class="text-secondary">{{ trade.status }}</span>
+                        {% endif %}
+                    </h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="card card-clean p-3 text-center border-0 shadow-sm border-start border-4 {% if trade.pnl_usd >= 0 %}border-success{% else %}border-danger{% endif %}">
+                    <span class="text-secondary small fw-medium">Realized PnL ($)</span>
+                    <h4 class="fw-bold mb-0 mt-1 {% if trade.pnl_usd >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        {% if trade.pnl_usd >= 0 %}+${{ trade.pnl_usd }}{% else %}-${{ trade.abs_pnl_usd }}{% endif %}
+                    </h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="card card-clean p-3 text-center border-0 shadow-sm border-start border-4 border-warning">
+                    <span class="text-secondary small fw-medium">ROI Return (%)</span>
+                    <h4 class="fw-bold mb-0 mt-1 {% if trade.pnl_pct >= 0 %}text-success{% else %}text-danger{% endif %}">
+                        {% if trade.pnl_pct >= 0 %}+{{ trade.pnl_pct }}%{% else %}{{ trade.pnl_pct }}%{% endif %}
+                    </h4>
+                </div>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <div class="card card-clean p-3 text-center border-0 shadow-sm border-start border-4 border-info">
+                    <span class="text-secondary small fw-medium">Executed R-Multiple</span>
+                    <h4 class="fw-bold mb-0 mt-1 text-info">{{ trade.r_multiple }} R</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detailed Breakdown Card -->
+        <div class="card card-clean p-4 mb-4 border-0 shadow-sm">
+            <h5 class="fw-bold text-dark mb-3 pb-2 border-bottom">
+                <i class="bi bi-info-circle text-primary me-2"></i> Execution & Setup Details
+            </h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Entry Price:</span>
+                            <span class="fw-bold">${{ trade.entry_price }}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Exit Price:</span>
+                            <span class="fw-bold">{% if trade.exit_price %}${{ trade.exit_price }}{% else %}Position Open{% endif %}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Stop Loss Price:</span>
+                            <span class="fw-bold text-danger">{% if trade.stop_loss %}${{ trade.stop_loss }}{% else %}Not Set{% endif %}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Take Profit Target:</span>
+                            <span class="fw-bold text-success">{% if trade.take_profit %}${{ trade.take_profit }}{% else %}Not Set{% endif %}</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col-md-6">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Position Size:</span>
+                            <span class="fw-bold">${{ trade.position_size_usd }} ({{ trade.leverage }}x Leverage)</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Pattern Tag:</span>
+                            <span class="fw-bold text-primary">{{ trade.get_pattern_tag_display|default:"General Setup" }}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Mindset State:</span>
+                            <span class="fw-bold text-warning">{{ trade.get_psychology_state_display }}</span>
+                        </li>
+                        <li class="list-group-item bg-transparent text-dark border-bottom d-flex justify-content-between">
+                            <span class="text-secondary">Closed Timestamp:</span>
+                            <span class="fw-bold">{% if trade.closed_at %}{{ trade.closed_at|date:"M d, Y H:i" }}{% else %}N/A{% endif %}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {% if trade.notes %}
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="text-secondary fw-semibold mb-2">Trade Notes & Reasoning</h6>
+                    <div class="p-3 bg-light rounded border text-dark">
+                        {{ trade.notes|linebreaks }}
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if trade.chart_url %}
+                <div class="mt-4 pt-3 border-top">
+                    <h6 class="text-secondary fw-semibold mb-2">Chart Screenshot</h6>
+                    <a href="{{ trade.chart_url }}" target="_blank" class="btn btn-outline-clean btn-sm mb-2"><i class="bi bi-box-arrow-up-right me-1"></i> Open Original Chart</a>
+                    <div class="ratio ratio-16x9 border rounded overflow-hidden">
+                        <iframe src="{{ trade.chart_url }}" allowfullscreen></iframe>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- ================= SHAREABLE TRADE CARD MODAL ================= -->
+<div class="modal fade" id="shareCardModal" tabindex="-1" aria-labelledby="shareCardModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content card-clean border-0 shadow-lg p-3">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title text-dark fw-bold" id="shareCardModalLabel">
+                    <i class="bi bi-card-heading text-primary me-2"></i> Trade Summary Card
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="p-4 bg-light rounded-4 border text-center shadow-sm">
+                    <span class="badge badge-user mb-2">COININTEL JOURNAL</span>
+                    <h2 class="fw-bold text-dark mb-1">{{ trade.symbol }}</h2>
+                    <span class="badge {% if trade.trade_type == 'LONG' %}bg-success{% else %}bg-danger{% endif %} px-3 py-1 mb-3">
+                        {{ trade.trade_type }} {{ trade.leverage }}X
+                    </span>
+
+                    <div class="row g-2 my-3">
+                        <div class="col-6">
+                            <div class="p-2 bg-white rounded border">
+                                <span class="text-secondary small d-block">Realized PnL</span>
+                                <span class="fw-bold fs-4 {% if trade.pnl_usd >= 0 %}text-success{% else %}text-danger{% endif %}">
+                                    {% if trade.pnl_usd >= 0 %}+${{ trade.pnl_usd }}{% else %}-${{ trade.abs_pnl_usd }}{% endif %}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="p-2 bg-white rounded border">
+                                <span class="text-secondary small d-block">Risk:Reward</span>
+                                <span class="fw-bold fs-4 text-primary">{{ trade.r_multiple }} R</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p class="text-secondary small mb-1">Pattern: <strong class="text-dark">{{ trade.get_pattern_tag_display|default:"Strategy Setup" }}</strong></p>
+                    <p class="text-muted small mb-0">Trader: <strong class="text-primary">@{{ request.user.username }}</strong></p>
+                </div>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-clean btn-sm" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary-clean btn-sm" onclick="alert('Trade summary card copied!')">
+                    <i class="bi bi-share me-1"></i> Copy Link
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

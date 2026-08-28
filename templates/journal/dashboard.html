@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-dark mb-1">
+            Trading Dashboard <span class="fs-5 text-muted fw-normal">({{ request.user.username }})</span>
+        </h2>
+        <p class="text-secondary mb-0">Overview of your trade logs, performance metrics, and tools.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{% url 'trade_create' %}" class="btn btn-primary-clean py-2 px-3 me-2">
+            <i class="bi bi-plus-circle me-1"></i> Log Trade
+        </a>
+        <a href="{% url 'generate_demo_trades' %}" class="btn btn-outline-clean btn-sm py-2">
+            <i class="bi bi-magic me-1"></i> Add Demo Data
+        </a>
+    </div>
+</div>
+
+<!-- ================= TOP STAT CARDS ================= -->
+<div class="row g-3 mb-4">
+    <!-- Net PnL -->
+    <div class="col-6 col-md-3">
+        <div class="card card-clean p-3 border-0 shadow-sm border-start border-4 {% if net_pnl >= 0 %}border-success{% else %}border-danger{% endif %}">
+            <span class="text-secondary small fw-medium">Net Realized PnL</span>
+            <h3 class="fw-bold mb-0 mt-1 {% if net_pnl >= 0 %}text-success{% else %}text-danger{% endif %}">
+                {% if net_pnl >= 0 %}+${{ net_pnl }}{% else %}-${{ abs_net_pnl }}{% endif %}
+            </h3>
+            <span class="text-muted small">{{ closed_trades_count }} closed trades</span>
+        </div>
+    </div>
+
+    <!-- Win Rate -->
+    <div class="col-6 col-md-3">
+        <div class="card card-clean p-3 border-0 shadow-sm border-start border-4 border-primary">
+            <span class="text-secondary small fw-medium">Win Rate</span>
+            <h3 class="fw-bold mb-0 mt-1 text-primary">{{ win_rate }}%</h3>
+            <span class="text-muted small">{{ open_trades_count }} Open Positions</span>
+        </div>
+    </div>
+
+    <!-- Profit Factor -->
+    <div class="col-6 col-md-3">
+        <div class="card card-clean p-3 border-0 shadow-sm border-start border-4 border-warning">
+            <span class="text-secondary small fw-medium">Profit Factor</span>
+            <h3 class="fw-bold mb-0 mt-1 text-dark">{{ profit_factor }}</h3>
+            <span class="text-muted small">Win / Loss ratio</span>
+        </div>
+    </div>
+
+    <!-- Avg R-Multiple -->
+    <div class="col-6 col-md-3">
+        <div class="card card-clean p-3 border-0 shadow-sm border-start border-4 border-info">
+            <span class="text-secondary small fw-medium">Avg Risk:Reward</span>
+            <h3 class="fw-bold mb-0 mt-1 text-info">{{ avg_r }} R</h3>
+            <span class="text-muted small">Planned R:R ratio</span>
+        </div>
+    </div>
+</div>
+
+<!-- ================= HELPFUL TOOL CARDS ================= -->
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card card-clean p-3 d-flex flex-row align-items-center border-0 shadow-sm">
+            <div class="fs-2 text-warning me-3"><i class="bi bi-heart-pulse"></i></div>
+            <div>
+                <h6 class="fw-bold text-dark mb-1">Psychology Audit</h6>
+                <p class="text-secondary small mb-2">Track emotional leaks & stay disciplined.</p>
+                <a href="{% url 'fomo_shield' %}" class="fw-semibold small">View Audit →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-clean p-3 d-flex flex-row align-items-center border-0 shadow-sm">
+            <div class="fs-2 text-success me-3"><i class="bi bi-lightbulb"></i></div>
+            <div>
+                <h6 class="fw-bold text-dark mb-1">Pattern Edge</h6>
+                <p class="text-secondary small mb-2">Discover your best setup patterns.</p>
+                <a href="{% url 'pattern_edge_matrix' %}" class="fw-semibold small text-success">View Edge →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card card-clean p-3 d-flex flex-row align-items-center border-0 shadow-sm">
+            <div class="fs-2 text-primary me-3"><i class="bi bi-bar-chart-line"></i></div>
+            <div>
+                <h6 class="fw-bold text-dark mb-1">Performance Charts</h6>
+                <p class="text-secondary small mb-2">Visual equity growth curve & stats.</p>
+                <a href="{% url 'analytics_dashboard' %}" class="fw-semibold small text-primary">View Analytics →</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= RECENT TRADES TABLE ================= -->
+<div class="card card-clean p-4 border-0 shadow-sm">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark mb-0"><i class="bi bi-list-task me-2 text-primary"></i> Recent Trade Logs</h5>
+        <a href="{% url 'trade_list' %}" class="btn btn-outline-clean btn-sm">View All Trades ({{ total_trades }}) →</a>
+    </div>
+
+    {% if recent_trades %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary border-bottom">
+                    <tr>
+                        <th>Date</th>
+                        <th>Symbol</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Entry Price</th>
+                        <th>Exit Price</th>
+                        <th>PnL ($)</th>
+                        <th>Mindset</th>
+                        <th class="text-end">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in recent_trades %}
+                        <tr>
+                            <td class="text-muted small">{{ trade.created_at|date:"M d, H:i" }}</td>
+                            <td class="fw-bold text-dark">{{ trade.symbol }}</td>
+                            <td>
+                                <span class="badge {% if trade.trade_type == 'LONG' %}bg-success{% else %}bg-danger{% endif %} bg-opacity-10 text-{% if trade.trade_type == 'LONG' %}success{% else %}danger{% endif %} border border-{% if trade.trade_type == 'LONG' %}success{% else %}danger{% endif %}">
+                                    {{ trade.trade_type }} {{ trade.leverage }}x
+                                </span>
+                            </td>
+                            <td>
+                                {% if trade.status == 'CLOSED_WIN' %}
+                                    <span class="badge bg-success bg-opacity-10 text-success">WIN</span>
+                                {% elif trade.status == 'CLOSED_LOSS' %}
+                                    <span class="badge bg-danger bg-opacity-10 text-danger">LOSS</span>
+                                {% elif trade.status == 'OPEN' %}
+                                    <span class="badge bg-primary bg-opacity-10 text-primary">OPEN</span>
+                                {% else %}
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ trade.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>${{ trade.entry_price }}</td>
+                            <td>{% if trade.exit_price %}${{ trade.exit_price }}{% else %}-{% endif %}</td>
+                            <td class="fw-bold {% if trade.pnl_usd > 0 %}text-success{% elif trade.pnl_usd < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                {% if trade.pnl_usd > 0 %}+${{ trade.pnl_usd }}{% elif trade.pnl_usd < 0 %}-${{ trade.abs_pnl_usd }}{% else %}$0.00{% endif %}
+                            </td>
+                            <td class="small text-secondary">{{ trade.get_psychology_state_display }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'trade_detail' trade.id %}" class="btn btn-sm btn-outline-clean me-1"><i class="bi bi-eye"></i></a>
+                                <a href="{% url 'trade_edit' trade.id %}" class="btn btn-sm btn-outline-clean"><i class="bi bi-pencil"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-5 text-secondary">
+            <i class="bi bi-journal-x display-4 text-muted mb-3 d-block"></i>
+            <h5>No trades recorded yet!</h5>
+            <p>Log your first trade manually or click <strong>Add Demo Data</strong> to get started.</p>
+            <a href="{% url 'trade_create' %}" class="btn btn-primary-clean mt-2">+ Log First Trade</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

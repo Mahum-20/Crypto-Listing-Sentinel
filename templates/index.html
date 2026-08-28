@@ -1,377 +1,190 @@
 {% extends 'base.html' %}
-{% block title %}Analyzer Guide: How to Gather Data - Mayhem Edge{% endblock %}
 
-{% block extra_head %}
-<style>
-    /* Guide-specific styles for robotic theme */
-    .guide-container {
-        font-family: 'Orbitron', monospace;
-        max-width: 900px;
-        margin: 0 auto;
-        padding: 2rem;
-    }
-
-    h1 {
-        font-family: 'Orbitron', monospace;
-        font-weight: 700;
-        font-size: 2.5rem;
-        background: linear-gradient(45deg, #00ff88, #00bfff, #ff00ff);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        text-align: center;
-        margin-bottom: 2rem;
-        letter-spacing: 2px;
-        animation: glow 2s ease-in-out infinite alternate;
-    }
-
-    .section {
-        background-color: #2a2a2a;
-        border: 1px solid #333;
-        border-radius: 8px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .section::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 5px;
-        background-color: #555;
-        transition: background-color 0.3s ease;
-    }
-
-    .section:hover::before {
-        background-color: #00ff88;
-        box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-    }
-
-    .section:hover {
-        background-color: #1e1e1e;
-        border-color: #00ff88;
-        box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
-    }
-
-    .section h2 {
-        font-family: 'Orbitron', monospace;
-        font-weight: 700;
-        color: #00ff88;
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .field-guide {
-        margin-bottom: 1.5rem;
-        padding: 1rem;
-        background-color: #1a1a1a;
-        border-radius: 4px;
-        border-left: 4px solid #00bfff;
-    }
-
-    .field-guide h3 {
-        font-family: 'Orbitron', monospace;
-        color: #00bfff;
-        margin-bottom: 0.75rem;
-        font-size: 1.1rem;
-        letter-spacing: 0.5px;
-    }
-
-    .steps {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .steps li {
-        margin-bottom: 0.5rem;
-        color: #b0b0b0;
-        font-family: 'Orbitron', monospace;
-        font-size: 0.95rem;
-    }
-
-    .steps li strong {
-        color: #e0e0e0;
-    }
-
-    .tools {
-        font-size: 0.85rem;
-        color: #666;
-        margin-top: 0.5rem;
-        padding: 0.5rem;
-        background-color: #111;
-        border-radius: 4px;
-    }
-
-    .tip {
-        background-color: #1e1e1e;
-        border: 1px solid #00ff88;
-        border-radius: 4px;
-        padding: 1rem;
-        margin-top: 1rem;
-        color: #b0b0b0;
-        font-size: 0.9rem;
-    }
-
-    .tip strong {
-        color: #00ff88;
-    }
-
-    @keyframes glow {
-        from {
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5), 0 0 20px rgba(0, 255, 136, 0.3);
-        }
-        to {
-            text-shadow: 0 0 20px rgba(0, 191, 255, 0.7), 0 0 30px rgba(255, 0, 255, 0.5);
-        }
-    }
-
-    .back-link {
-        text-align: center;
-        margin-top: 2rem;
-    }
-
-    .back-link a {
-        color: #00ff88;
-        text-decoration: none;
-        font-family: 'Orbitron', monospace;
-        font-weight: 600;
-    }
-
-    .back-link a:hover {
-        text-decoration: underline;
-    }
-</style>
-{% endblock %}
+{% block title %}CoinIntel - Crypto Market Intelligence & Personal Trading Journal{% endblock %}
 
 {% block content %}
-<div class="guide-container">
-    <h1>Analyzer Guide: How to Gather Data for Beginners</h1>
-    <p style="text-align: center; color: #b0b0b0; margin-bottom: 2rem;">Step-by-step procedures to collect values for each analyzer field. Use the checklist page first, then input here. Tools are free/basic; takes 10-20min per coin. Focus on new CEX/DEX launches (e.g., Binance/OKX, Solana Pump.fun).</p>
+<!-- ================= HERO SECTION ================= -->
+<div class="row align-items-center py-4">
+    <div class="col-lg-7 text-center text-lg-start mb-4 mb-lg-0">
+        <span class="badge bg-primary bg-opacity-10 text-primary mb-3 px-3 py-2 fs-6 rounded-pill fw-semibold">
+            <i class="bi bi-stars me-1"></i> Live Crypto Analysis & Personal Journal
+        </span>
+        <h1 class="fw-bold display-4 mb-3 text-slate-900" style="line-height: 1.25;">
+            Analyze Crypto Markets. <span class="text-primary">Journal Your Trades.</span>
+        </h1>
+        <p class="text-secondary fs-5 mb-4 pe-lg-4" style="line-height: 1.6;">
+            Check real-time altcoin correlation vs Bitcoin, evaluate new listed coins for dump risk, and track your trade discipline in one clean app.
+        </p>
 
-    <!-- Fundamentals Section -->
-    <div class="section">
-        <h2>1. Fundamentals (40% Weight)</h2>
-        <p style="color: #b0b0b0; margin-bottom: 1rem;">Assess project viability pre-list. Score subjectively where needed (1=poor, 10=excellent).</p>
-
-        <div class="field-guide">
-            <h3>FDV (USD)</h3>
-            <p>Market cap at full dilution (circulating supply x price).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Go to CoinGecko or CoinMarketCap, search coin name/symbol.</li>
-                <li><strong>Step 2:</strong> Under "Tokenomics" or "Markets", find "Fully Diluted Valuation" (FDV).</li>
-                <li><strong>Step 3:</strong> Enter exact number (e.g., 150000000 for $150M). If pre-launch, calculate: Total Supply x Pre-List Price from DEX.</li>
-            </ul>
-            <div class="tools">Tools: CoinGecko.com, CoinMarketCap.com</div>
+        <!-- PROMINENT DIRECT TOOL BUTTONS IN HERO BANNER -->
+        <div class="d-flex flex-wrap gap-3 justify-content-center justify-content-lg-start mb-3">
+            <a href="{% url 'correlation_visualizer' %}" class="btn btn-primary-clean py-3 px-4 fs-6 shadow-sm">
+                <i class="bi bi-graph-up me-2"></i> Launch BTC Correlation Tool
+            </a>
+            <a href="{% url 'new_coin_analyzer' %}" class="btn btn-outline-primary py-3 px-4 fs-6 border-2 font-semibold">
+                <i class="bi bi-search me-2"></i> Smart Coin Evaluator
+            </a>
         </div>
 
-        <div class="field-guide">
-            <h3>Vesting Cliff %</h3>
-            <p>% of tokens unlocked on Day 1 (VC/team dumps trigger Pattern 2).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Visit TokenUnlocks.app, search coin symbol.</li>
-                <li><strong>Step 2:</strong> View "Unlock Schedule" chart; note % unlocked at launch date.</li>
-                <li><strong>Step 3:</strong> If no data, check whitepaper (project site) for "Token Vesting" section; estimate % for private/seed rounds.</li>
-            </ul>
-            <div class="tools">Tools: TokenUnlocks.app, Project whitepaper</div>
-        </div>
-
-        <div class="field-guide">
-            <h3>Team Score (1-10)</h3>
-            <p>Subjective rating of team's credibility/experience.</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Search team names on LinkedIn (from project site/Discord).</li>
-                <li><strong>Step 2:</strong> Check GitHub for commits (active >50 last month?); past projects (no rugs?).</li>
-                <li><strong>Step 3:</strong> Score: 10=ex-Google/VC-backed; 1=anonymous/no track record. Average team members.</li>
-            </ul>
-            <div class="tools">Tools: LinkedIn.com, GitHub.com, RugDoc.io</div>
-        </div>
-
-        <div class="field-guide">
-            <h3>Utility Score (1-10)</h3>
-            <p>Rating of real-world use case vs. hype.</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Read whitepaper/exec summary on project site.</li>
-                <li><strong>Step 2:</strong> Check Messari.io for TVL/metrics; partnerships listed?</li>
-                <li><strong>Step 3:</strong> Score: 10=proven product/TVL> $10M; 1=pure meme/no roadmap.</li>
-            </ul>
-            <div class="tools">Tools: Messari.io, Project website</div>
-        </div>
-
-        <div class="field-guide">
-            <h3>Audit Status</h3>
-            <p>Security review level (none=high rug risk).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Search "coin name audit" on Google or project site/docs.</li>
-                <li><strong>Step 2:</strong> Check Certik/PeckShield reports (full=complete scan; partial=basic).</li>
-                <li><strong>Step 3:</strong> Select: Full (passed audit), Partial (in-progress), None (no mention).</li>
-            </ul>
-            <div class="tools">Tools: Certik.org, PeckShield.com</div>
-        </div>
-        <div class="tip"><strong>Beginner Tip:</strong> If FDV >$500M + no audit, skip—80% bleed risk (Pattern 3).</div>
+        {% if not user.is_authenticated %}
+            <div class="mt-2 text-secondary small">
+                Want a private trade journal? <a href="{% url 'signup' %}" class="fw-semibold">Create Free Account</a> or <a href="{% url 'login' %}" class="fw-semibold">Sign In</a>.
+            </div>
+        {% else %}
+            <div class="mt-2 text-secondary small">
+                Logged in as <strong>{{ user.username }}</strong>. <a href="{% url 'journal_dashboard' %}" class="fw-semibold">Open Dashboard →</a>
+            </div>
+        {% endif %}
     </div>
 
-    <!-- On-Chain Section -->
-    <div class="section">
-        <h2>2. On-Chain (30% Weight)</h2>
-        <p style="color: #b0b0b0; margin-bottom: 1rem;">Track wallets/liquidity post-launch (first 1-2h). Use blockchain explorers.</p>
+    <!-- Friendly Dashboard Preview Card -->
+    <div class="col-lg-5">
+        <div class="card card-clean p-4 shadow-sm border-0 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="fw-bold text-dark"><i class="bi bi-person-circle text-primary me-2"></i> Personal Overview</span>
+                <span class="badge bg-success bg-opacity-10 text-success fw-semibold">Active Account</span>
+            </div>
 
-        <div class="field-guide">
-            <h3>Holders Concentrated?</h3>
-            <p>Yes if top holders control >30% (dump risk).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Go to Etherscan.io (ETH) or Solscan.io (Solana), search contract address.</li>
-                <li><strong>Step 2:</strong> Click "Holders" tab; sum top 10 % holdings.</li>
-                <li><strong>Step 3:</strong> Yes if >30% or 3+ wallets >5% each (clusters).</li>
-            </ul>
-            <div class="tools">Tools: Etherscan.io, Solscan.io, Bubblemaps.io (visual clusters)</div>
-        </div>
+            <div class="p-3 bg-light rounded mb-3 border">
+                <div class="d-flex justify-content-between mb-1">
+                    <span class="text-secondary small">Disciplined Execution Rate</span>
+                    <span class="text-success fw-bold">88.5%</span>
+                </div>
+                <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" style="width: 88.5%"></div>
+                </div>
+            </div>
 
-        <div class="field-guide">
-            <h3>Liquidity Depth (USD)</h3>
-            <p>Total buy/sell order value near price (thin < $100k = volatile).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> On Dexscreener.com or CEX (Binance), search pair.</li>
-                <li><strong>Step 2:</strong> View "Depth" chart (24h); sum bids/asks within 2% price.</li>
-                <li><strong>Step 3:</strong> Enter total USD (e.g., 750000). Pre-list: Check LP pool size.</li>
-            </ul>
-            <div class="tools">Tools: Dexscreener.com, TradingView order book</div>
-        </div>
+            <div class="row g-2 mb-3 text-center">
+                <div class="col-6">
+                    <div class="p-3 bg-light rounded border">
+                        <span class="text-secondary small d-block">Win Rate</span>
+                        <span class="fw-bold fs-4 text-success">72.4%</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="p-3 bg-light rounded border">
+                        <span class="text-secondary small d-block">Avg Risk:Reward</span>
+                        <span class="fw-bold fs-4 text-primary">2.4 R</span>
+                    </div>
+                </div>
+            </div>
 
-        <div class="field-guide">
-            <h3>Whale Inflows?</h3>
-            <p>Yes if large wallets (>1M USD) buying early.</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Set alerts on Whale-Alert.io or Lookonchain.com for coin symbol.</li>
-                <li><strong>Step 2:</strong> Check last 1h txns: Inflows > outflows?</li>
-                <li><strong>Step 3:</strong> Yes if >$1M net buy from labeled whales (Arkham).</li>
-            </ul>
-            <div class="tools">Tools: Whale-Alert.io, ArkhamIntelligence.com</div>
+            <div class="p-2 bg-primary bg-opacity-10 rounded text-center">
+                <span class="text-primary small"><i class="bi bi-shield-check me-1"></i> Easy trade tracking with automated PnL calculation</span>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div class="field-guide">
-            <h3>Dev Dump %</h3>
-            <p>% supply sold by dev wallet in first hour.</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Find dev wallet on Etherscan/Solscan (from launch tx or whitepaper).</li>
-                <li><strong>Step 2:</strong> View "Token Transfers" tab; sum sells since launch.</li>
-                <li><strong>Step 3:</strong> % = (sold / initial hold) x 100 (e.g., 5 for low risk).</li>
-            </ul>
-            <div class="tools">Tools: Etherscan.io, Solscan.io</div>
+<!-- ================= FEATURED MARKET ANALYSIS TOOLS SECTION (FRONT & CENTER) ================= -->
+<div class="card card-clean p-4 p-md-5 mb-5 bg-white border-0 shadow-sm border-start border-4 border-primary">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+            <span class="text-primary fw-bold text-uppercase tracking-wider small">FEATURED MARKET TOOLS</span>
+            <h3 class="fw-bold text-dark mb-0">Live Crypto Intelligence Engines</h3>
         </div>
-
-        <div class="field-guide">
-            <h3>High Bot TX?</h3>
-            <p>Yes if >50% txns from bots (fake volume, Pattern 8).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> On Dune.com, query "coin txns" dashboard.</li>
-                <li><strong>Step 2:</strong> Filter new wallets (<1 day old); count % of total txns.</li>
-                <li><strong>Step 3:</strong> Yes if bundles (5+ txns/block) or >50% bot-like (repeat small buys).</li>
-            </ul>
-            <div class="tools">Tools: Dune.com (free queries), Dexscreener txns tab</div>
-        </div>
-        <div class="tip"><strong>Beginner Tip:</strong> Start with free explorers; upgrade to Nansen ($100/mo) for pro whale tags.</div>
+        <span class="badge bg-primary text-white px-3 py-2">NO LOGIN REQUIRED</span>
     </div>
 
-    <!-- Technical Section -->
-    <div class="section">
-        <h2>3. Technical (20% Weight)</h2>
-        <p style="color: #b0b0b0; margin-bottom: 1rem;">Use charts post-open (1-5m timeframes). Beginner: Follow TradingView tutorials.</p>
-
-        <div class="field-guide">
-            <h3>Initial Price Action</h3>
-            <p>First 5-10min move type.</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Open TradingView.com, search coin pair (e.g., COINUSDT).</li>
-                <li><strong>Step 2:</strong> Switch to 1m chart; zoom to launch time.</li>
-                <li><strong>Step 3:</strong> Select: Massive Pump (>20% up), Immediate Dump (>10% down), Sideways (<5% range), Small Pump (5-20% up).</li>
-            </ul>
-            <div class="tools">Tools: TradingView.com</div>
+    <div class="row g-4">
+        <!-- 1. BTC Correlation Visualizer Card -->
+        <div class="col-md-6">
+            <div class="p-4 rounded-4 bg-light border h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 bg-primary bg-opacity-10 rounded-3 text-primary me-3 fs-3">
+                            <i class="bi bi-graph-up"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-1">BTC Correlation Tool</h4>
+                            <span class="text-muted small">Real-Time Binance Exchange Data</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary mb-4">
+                        Track whether altcoins (ETH, SOL, AVAX, NEAR) follow Bitcoin's price movements or trade independently across Scalper, Day, Swing, and Positional timeframes.
+                    </p>
+                </div>
+                <a href="{% url 'correlation_visualizer' %}" class="btn btn-primary-clean w-100 py-3 text-center font-semibold">
+                    <i class="bi bi-activity me-2"></i> Open BTC Correlation Tool →
+                </a>
+            </div>
         </div>
 
-        <div class="field-guide">
-            <h3>RSI (14-period)</h3>
-            <p>Momentum oscillator (0-100; >70 overbought=dump signal).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> On TradingView, add "RSI" indicator (default 14 periods).</li>
-                <li><strong>Step 2:</strong> View current value on 5m chart.</li>
-                <li><strong>Step 3:</strong> Enter exact number (e.g., 75). If no chart, approx from price action.</li>
-            </ul>
-            <div class="tools">Tools: TradingView.com (free indicators)</div>
+        <!-- 2. Smart Coin Analyzer Card -->
+        <div class="col-md-6">
+            <div class="p-4 rounded-4 bg-light border h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="p-3 bg-success bg-opacity-10 rounded-3 text-success me-3 fs-3">
+                            <i class="bi bi-search"></i>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-1">Smart Coin Evaluator</h4>
+                            <span class="text-muted small">Fundamental & On-Chain Risk Engine</span>
+                        </div>
+                    </div>
+                    <p class="text-secondary mb-4">
+                        Evaluate newly listed coins before trading. Evaluates FDV inflation, vesting unlock pressure, holder concentration, whale inflows, and bot transaction activity.
+                    </p>
+                </div>
+                <a href="{% url 'new_coin_analyzer' %}" class="btn btn-outline-primary border-2 w-100 py-3 text-center font-semibold">
+                    <i class="bi bi-cpu me-2"></i> Open Smart Coin Evaluator →
+                </a>
+            </div>
         </div>
+    </div>
+</div>
 
-        <div class="field-guide">
-            <h3>Negative Funding?</h3>
-            <p>Yes if perp funding rate <0 (shorts pay longs, bearish).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Go to Coinglass.com, search coin futures.</li>
-                <li><strong>Step 2:</strong> Check "Funding Rate" (8h rate); current value.</li>
-                <li><strong>Step 3:</strong> Yes if <0%; No if >0% or N/A (spot-only).</li>
-            </ul>
-            <div class="tools">Tools: Coinglass.com, Binance futures page</div>
+<hr class="my-5 border-secondary-subtle">
+
+<!-- ================= TRADING JOURNAL FEATURES GRID ================= -->
+<div class="text-center mb-5">
+    <span class="text-primary fw-bold text-uppercase tracking-wider small">PERSONAL TRADING JOURNAL</span>
+    <h2 class="fw-bold display-6 mt-1 text-slate-900">Keep Track of Every Execution</h2>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- Feature 1: Simple Journal -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-clean p-4 h-100 border-0 shadow-sm">
+            <div class="fs-1 text-primary mb-3"><i class="bi bi-journal-check"></i></div>
+            <h4 class="fw-bold mb-2">Personal Trade Log</h4>
+            <p class="text-secondary mb-3">Record your entries, exits, stop losses, and notes. The app automatically calculates your profit, loss %, and risk-reward ratio.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'trade_list' %}" class="fw-semibold">View Trade Logs →</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="fw-semibold">Start Journaling →</a>
+            {% endif %}
         </div>
-        <div class="tip"><strong>Beginner Tip:</strong> Watch YouTube "TradingView RSI tutorial" (5min); ignore if no perps.</div>
     </div>
 
-    <!-- Market/Sentiment Section -->
-    <div class="section">
-        <h2>4. Market/Sentiment (10% Weight)</h2>
-        <p style="color: #b0b0b0; margin-bottom: 1rem;">Gauge external hype; quick social scans.</p>
-
-        <div class="field-guide">
-            <h3>Social Hype Level</h3>
-            <p>Overall buzz (high=Pattern 1 risk).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Search coin on X.com/Twitter (last 24h).</li>
-                <li><strong>Step 2:</strong> Count posts: >100=high, 20-100=medium, <20=low.</li>
-                <li><strong>Step 3:</strong> Check tone (positive?); select based on volume/engagement.</li>
-            </ul>
-            <div class="tools">Tools: X.com advanced search</div>
+    <!-- Feature 2: Psychology Audit -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-clean p-4 h-100 border-0 shadow-sm">
+            <div class="fs-1 text-warning mb-3"><i class="bi bi-heart-pulse"></i></div>
+            <h4 class="fw-bold mb-2">Psychology & Mindset Audit</h4>
+            <p class="text-secondary mb-3">Understand how emotional trades (like FOMO or revenge trading) impact your results, and get helpful reminders to stay calm and disciplined.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'fomo_shield' %}" class="text-warning fw-semibold">View Psychology Audit →</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="text-warning fw-semibold">Learn More →</a>
+            {% endif %}
         </div>
-
-        <div class="field-guide">
-            <h3>Social Mentions Multiplier</h3>
-            <p>Avg daily mentions vs. baseline (5x=rotation signal).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Use LunarCrush.com, search coin.</li>
-                <li><strong>Step 2:</strong> View "Social Mentions" 24h vs. 7d avg.</li>
-                <li><strong>Step 3:</strong> Multiplier = today / avg (e.g., 6 for 6x spike).</li>
-            </ul>
-            <div class="tools">Tools: LunarCrush.com (free tier)</div>
-        </div>
-
-        <div class="field-guide">
-            <h3>Macro Bullish?</h3>
-            <p>Yes if market favors alts (BTC stable, fear low).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Check alternative.me/crypto-fear-greed-index.</li>
-                <li><strong>Step 2:</strong> Fear/Greed <50? BTC >$80k? Altseason (ETH/BTC >0.05)?</li>
-                <li><strong>Step 3:</strong> Yes if 2+ green signals; No otherwise.</li>
-            </ul>
-            <div class="tools">Tools: Alternative.me, CoinMarketCap.com</div>
-        </div>
-
-        <div class="field-guide">
-            <h3>Competitor Overlap?</h3>
-            <p>Yes if saturated niche (e.g., 10th AI token).</p>
-            <ul class="steps">
-                <li><strong>Step 1:</strong> Search "similar to [coin]" on CoinGecko categories.</li>
-                <li><strong>Step 2:</strong> Count rivals in same tag (e.g., DeFi, Memes).</li>
-                <li><strong>Step 3:</strong> Yes if >5 active competitors; No for unique.</li>
-            </ul>
-            <div class="tools">Tools: CoinGecko.com categories</div>
-        </div>
-        <div class="tip"><strong>Beginner Tip:</strong> Set Google Alerts for coin name; cross-check with checklist Step 8.</div>
     </div>
 
-    <div class="back-link">
-        <a href="{% url 'new_coin_analyzer' %}">← Back to Analyzer</a> | <a href="{% url 'new_coin_checklist' %}">Checklist Page</a>
+    <!-- Feature 3: Strategy & Pattern Edge -->
+    <div class="col-md-6 col-lg-4">
+        <div class="card card-clean p-4 h-100 border-0 shadow-sm">
+            <div class="fs-1 text-success mb-3"><i class="bi bi-lightbulb"></i></div>
+            <h4 class="fw-bold mb-2">Pattern & Strategy Helper</h4>
+            <p class="text-secondary mb-3">See which market patterns give you the highest win rate, and test prospective trade setups before putting money on the line.</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'pattern_edge_matrix' %}" class="text-success fw-semibold">Check Strategy Edge →</a>
+            {% else %}
+                <a href="{% url 'signup' %}" class="text-success fw-semibold">Explore Edge →</a>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

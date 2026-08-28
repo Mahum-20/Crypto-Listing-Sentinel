@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if is_edit %}Edit Trade Log #{{ trade.id }}{% else %}Log New Trade{% endif %} | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-9 col-lg-8">
+        <div class="card card-clean p-4 p-md-5 border-0 shadow-sm">
+            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom">
+                <div>
+                    <h3 class="fw-bold text-dark mb-1">
+                        {% if is_edit %}<i class="bi bi-pencil-square me-2 text-warning"></i> Edit Trade Log #{{ trade.id }}{% else %}<i class="bi bi-plus-circle me-2 text-primary"></i> Log New Trade Entry{% endif %}
+                    </h3>
+                    <p class="text-secondary mb-0">Record trade prices, position size, setup strategy, and mindset.</p>
+                </div>
+                <a href="{% url 'trade_list' %}" class="btn btn-outline-clean btn-sm"><i class="bi bi-arrow-left"></i> Back to Logs</a>
+            </div>
+
+            <form method="POST" action="{% if is_edit %}{% url 'trade_edit' trade.id %}{% else %}{% url 'trade_create' %}{% endif %}">
+                {% csrf_token %}
+
+                <!-- Basic Trade Details -->
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Pair / Symbol *</label>
+                        <input type="text" name="symbol" class="form-control text-uppercase" placeholder="e.g. BTC/USDT" value="{{ trade.symbol|default:'' }}" required>
+                    </div>
+
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Trade Direction *</label>
+                        <select name="trade_type" class="form-select">
+                            {% for val, label in trade_type_choices %}
+                                <option value="{{ val }}" {% if trade.trade_type == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label text-secondary fw-medium">Trade Status *</label>
+                        <select name="status" class="form-select">
+                            {% for val, label in status_choices %}
+                                <option value="{{ val }}" {% if trade.status == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Prices & Position Size -->
+                <div class="row mb-3">
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Entry Price ($) *</label>
+                        <input type="number" step="any" name="entry_price" class="form-control" placeholder="0.00" value="{{ trade.entry_price|default:'' }}" required>
+                    </div>
+
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Exit Price ($)</label>
+                        <input type="number" step="any" name="exit_price" class="form-control" placeholder="0.00 (Optional)" value="{{ trade.exit_price|default:'' }}">
+                    </div>
+
+                    <div class="col-md-3 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Stop Loss ($)</label>
+                        <input type="number" step="any" name="stop_loss" class="form-control" placeholder="0.00" value="{{ trade.stop_loss|default:'' }}">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label text-secondary fw-medium">Take Profit ($)</label>
+                        <input type="number" step="any" name="take_profit" class="form-control" placeholder="0.00" value="{{ trade.take_profit|default:'' }}">
+                    </div>
+                </div>
+
+                <!-- Position Size & Leverage -->
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Position Capital ($ USD)</label>
+                        <input type="number" step="any" name="position_size_usd" class="form-control" value="{{ trade.position_size_usd|default:'1000' }}" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary fw-medium">Leverage Multiplier</label>
+                        <input type="number" name="leverage" class="form-control" value="{{ trade.leverage|default:'1' }}" min="1" max="125" required>
+                    </div>
+                </div>
+
+                <hr class="my-4">
+
+                <!-- Pattern Tag & Mindset State -->
+                <h5 class="text-dark fw-bold mb-3"><i class="bi bi-diagram-3 me-2 text-primary"></i> Strategy Setup & Mindset State</h5>
+
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3 mb-md-0">
+                        <label class="form-label text-secondary fw-medium">Market Behavior Pattern</label>
+                        <select name="pattern_tag" class="form-select">
+                            <option value="">-- Select Pattern Tag --</option>
+                            {% for val, label in pattern_choices %}
+                                <option value="{{ val }}" {% if trade.pattern_tag == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text text-muted small">Connects trade to Strategy Pattern win-rate helper.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label text-secondary fw-medium">Trade Execution Mindset *</label>
+                        <select name="psychology_state" class="form-select" required>
+                            {% for val, label in psychology_choices %}
+                                <option value="{{ val }}" {% if trade.psychology_state == val %}selected{% endif %}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="form-text text-muted small">Tracks emotional habits for your Psychology Audit.</div>
+                    </div>
+                </div>
+
+                <!-- Notes & Chart Link -->
+                <div class="mb-3">
+                    <label class="form-label text-secondary fw-medium">Trade Notes & Reasoning</label>
+                    <textarea name="notes" class="form-control" rows="3" placeholder="Why did you take this trade? Support level, chart pattern, market news, etc.">{{ trade.notes|default:'' }}</textarea>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-secondary fw-medium">Chart Screenshot Link (Optional)</label>
+                    <input type="url" name="chart_url" class="form-control" placeholder="https://s3.tradingview.com/snapshots/..." value="{{ trade.chart_url|default:'' }}">
+                </div>
+
+                <button type="submit" class="btn btn-primary-clean w-100 py-3 font-semibold fs-6">
+                    <i class="bi bi-check-circle me-2"></i> {% if is_edit %}Update Trade Log{% else %}Save Trade Log{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

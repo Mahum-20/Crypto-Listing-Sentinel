@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}Confirm Delete Trade | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card card-clean p-4 p-md-5 text-center border-0 shadow-sm">
+            <i class="bi bi-exclamation-triangle-fill text-danger display-3 mb-3"></i>
+            <h4 class="fw-bold text-dark">Delete Trade Log?</h4>
+            <p class="text-secondary mb-4">Are you sure you want to delete the trade entry for <strong class="text-dark">{{ trade.symbol }} ({{ trade.trade_type }})</strong> logged on {{ trade.created_at|date:"M d, Y" }}?</p>
+
+            <form method="POST" action="{% url 'trade_delete' trade.id %}">
+                {% csrf_token %}
+                <div class="d-flex gap-3 justify-content-center">
+                    <a href="{% url 'trade_list' %}" class="btn btn-outline-clean px-4 py-2">Cancel</a>
+                    <button type="submit" class="btn btn-danger px-4 py-2 fw-semibold">Confirm Delete</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

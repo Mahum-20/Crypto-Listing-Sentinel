@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Trade Logs | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h2 class="fw-bold text-dark mb-1"><i class="bi bi-journal-text me-2 text-primary"></i> Trade Logs</h2>
+        <p class="text-secondary mb-0">Browse and search your recorded trades.</p>
+    </div>
+    <a href="{% url 'trade_create' %}" class="btn btn-primary-clean py-2 px-3">
+        <i class="bi bi-plus-circle me-1"></i> Log Trade
+    </a>
+</div>
+
+<!-- ================= SEARCH & FILTER CARD ================= -->
+<div class="card card-clean p-3 mb-4 border-0 shadow-sm">
+    <form method="GET" action="{% url 'trade_list' %}" class="row g-3 align-items-center">
+        <div class="col-md-3">
+            <label class="form-label text-secondary small mb-1 fw-medium">Search Symbol</label>
+            <input type="text" name="symbol" class="form-control" placeholder="e.g. BTC, SOL" value="{{ symbol_filter }}">
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label text-secondary small mb-1 fw-medium">Trade Status</label>
+            <select name="status" class="form-select">
+                <option value="">All Statuses</option>
+                {% for val, label in status_choices %}
+                    <option value="{{ val }}" {% if status_filter == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label text-secondary small mb-1 fw-medium">Mindset State</label>
+            <select name="psychology" class="form-select">
+                <option value="">All Mindset States</option>
+                {% for val, label in psychology_choices %}
+                    <option value="{{ val }}" {% if psychology_filter == val %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="col-md-2 d-flex align-items-end gap-2">
+            <button type="submit" class="btn btn-primary-clean w-100"><i class="bi bi-funnel"></i> Filter</button>
+            <a href="{% url 'trade_list' %}" class="btn btn-outline-clean"><i class="bi bi-x-lg"></i></a>
+        </div>
+    </form>
+</div>
+
+<!-- ================= TRADES TABLE ================= -->
+<div class="card card-clean p-4 border-0 shadow-sm">
+    {% if trades %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light text-secondary border-bottom">
+                    <tr>
+                        <th>Date</th>
+                        <th>Symbol</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Entry Price</th>
+                        <th>Exit Price</th>
+                        <th>Size ($)</th>
+                        <th>PnL ($)</th>
+                        <th>Risk:Reward</th>
+                        <th>Mindset</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for trade in trades %}
+                        <tr>
+                            <td class="text-muted small">{{ trade.created_at|date:"Y-m-d H:i" }}</td>
+                            <td class="fw-bold text-dark">{{ trade.symbol }}</td>
+                            <td>
+                                <span class="badge {% if trade.trade_type == 'LONG' %}bg-success{% else %}bg-danger{% endif %} bg-opacity-10 text-{% if trade.trade_type == 'LONG' %}success{% else %}danger{% endif %} border border-{% if trade.trade_type == 'LONG' %}success{% else %}danger{% endif %}">
+                                    {{ trade.trade_type }} {{ trade.leverage }}x
+                                </span>
+                            </td>
+                            <td>
+                                {% if trade.status == 'CLOSED_WIN' %}
+                                    <span class="badge bg-success bg-opacity-10 text-success">WIN</span>
+                                {% elif trade.status == 'CLOSED_LOSS' %}
+                                    <span class="badge bg-danger bg-opacity-10 text-danger">LOSS</span>
+                                {% elif trade.status == 'OPEN' %}
+                                    <span class="badge bg-primary bg-opacity-10 text-primary">OPEN</span>
+                                {% else %}
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary">{{ trade.status }}</span>
+                                {% endif %}
+                            </td>
+                            <td>${{ trade.entry_price }}</td>
+                            <td>{% if trade.exit_price %}${{ trade.exit_price }}{% else %}-{% endif %}</td>
+                            <td class="text-secondary">${{ trade.position_size_usd }}</td>
+                            <td class="fw-bold {% if trade.pnl_usd > 0 %}text-success{% elif trade.pnl_usd < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                {% if trade.pnl_usd > 0 %}+${{ trade.pnl_usd }}{% elif trade.pnl_usd < 0 %}-${{ trade.abs_pnl_usd }}{% else %}$0.00{% endif %}
+                            </td>
+                            <td class="fw-semibold text-primary">{% if trade.r_multiple %}{{ trade.r_multiple }} R{% else %}-{% endif %}</td>
+                            <td class="small text-secondary">{{ trade.get_psychology_state_display }}</td>
+                            <td class="text-end">
+                                <a href="{% url 'trade_detail' trade.id %}" class="btn btn-sm btn-outline-clean me-1" title="View Details"><i class="bi bi-eye"></i></a>
+                                <a href="{% url 'trade_edit' trade.id %}" class="btn btn-sm btn-outline-clean me-1" title="Edit"><i class="bi bi-pencil"></i></a>
+                                <a href="{% url 'trade_delete' trade.id %}" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="text-center py-5 text-secondary">
+            <i class="bi bi-search display-4 text-muted mb-3 d-block"></i>
+            <h5>No matching trade logs found</h5>
+            <p>Try adjusting your search filters or add a new trade log.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% block title %}Strategy Patterns & Setup Evaluator | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-dark mb-1">
+            <i class="bi bi-lightbulb text-success me-2"></i> Strategy Patterns & Pre-Trade Evaluator
+        </h2>
+        <p class="text-secondary mb-0">See which coin patterns give you the highest win rate, and test new setups before entering.</p>
+    </div>
+</div>
+
+<!-- ================= PRE-TRADE SETUP EVALUATOR ================= -->
+<div class="card card-clean p-4 p-md-5 mb-4 border-0 shadow-sm border-start border-4 border-primary">
+    <div class="d-flex align-items-center mb-3">
+        <i class="bi bi-calculator fs-2 text-primary me-3"></i>
+        <div>
+            <h4 class="fw-bold text-dark mb-0">Pre-Trade Setup Evaluator</h4>
+            <span class="text-secondary small">Enter key parameters to get a quality rating score and recommended max risk position.</span>
+        </div>
+    </div>
+
+    <form method="POST" action="{% url 'pattern_edge_matrix' %}">
+        {% csrf_token %}
+        <div class="row g-3 mb-3">
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Coin Symbol</label>
+                <input type="text" name="sim_symbol" class="form-control" placeholder="e.g. SOL/USDT" value="{{ sim_result.symbol|default:'SOL/USDT' }}" required>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Market Cap / FDV ($)</label>
+                <input type="number" name="sim_fdv" class="form-control" placeholder="100000000" value="120000000">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Team Quality (1-10)</label>
+                <input type="number" name="sim_team" min="1" max="10" class="form-control" value="8">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Project Utility (1-10)</label>
+                <input type="number" name="sim_utility" min="1" max="10" class="form-control" value="8">
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Whale Buying Activity</label>
+                <select name="sim_whale" class="form-select">
+                    <option value="yes" selected>Yes (Whale Accumulation)</option>
+                    <option value="no">No (Normal Volume)</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">RSI Indicator Level</label>
+                <input type="number" name="sim_rsi" class="form-control" value="48">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Smart Contract Audit</label>
+                <select name="sim_audit" class="form-select">
+                    <option value="full" selected>Passed Full Audit</option>
+                    <option value="partial">Partial Audit</option>
+                    <option value="none">Not Audited</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label text-secondary small fw-medium">Social Hype Level</label>
+                <select name="sim_hype" class="form-select">
+                    <option value="high" selected>High Interest</option>
+                    <option value="medium">Moderate Interest</option>
+                    <option value="low">Low Interest</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary-clean py-2 px-4">
+            <i class="bi bi-check-circle me-2"></i> Evaluate Setup Quality
+        </button>
+    </form>
+
+    {% if sim_result %}
+        <div class="mt-4 p-4 bg-light rounded border text-dark">
+            <div class="row align-items-center text-center text-md-start">
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    <span class="text-secondary small text-uppercase d-block">Setup Grade</span>
+                    <h1 class="fw-bold text-{{ sim_result.bg }} display-4 mb-0">{{ sim_result.grade }}</h1>
+                </div>
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    <span class="text-secondary small text-uppercase d-block">Win Probability</span>
+                    <h3 class="text-primary fw-bold mb-0">{{ sim_result.win_probability }}</h3>
+                </div>
+                <div class="col-md-3 text-center mb-3 mb-md-0">
+                    <span class="text-secondary small text-uppercase d-block">Max Safe Risk ($)</span>
+                    <h3 class="text-warning fw-bold mb-0">${{ sim_result.max_risk_usd }}</h3>
+                </div>
+                <div class="col-md-3 text-center">
+                    <span class="text-secondary small text-uppercase d-block">Rec Position Capital</span>
+                    <h3 class="text-success fw-bold mb-0">${{ sim_result.rec_position_usd }}</h3>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- ================= PATTERN WIN RATE MATRIX TABLE ================= -->
+<div class="card card-clean p-4 border-0 shadow-sm">
+    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-table text-success me-2"></i> Personal Strategy Win-Rate per Pattern</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-secondary border-bottom">
+                <tr>
+                    <th>Market Behavior Pattern</th>
+                    <th>Logged Trades</th>
+                    <th>Win Rate (%)</th>
+                    <th>Total Net Profit ($)</th>
+                    <th>Average PnL per Trade</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in pattern_stats %}
+                    <tr>
+                        <td class="fw-bold text-dark">{{ p.label }}</td>
+                        <td>{{ p.count }}</td>
+                        <td class="fw-semibold {% if p.win_rate >= 60 %}text-success{% elif p.win_rate > 0 %}text-warning{% else %}text-secondary{% endif %}">
+                            {{ p.win_rate }}%
+                        </td>
+                        <td class="fw-bold {% if p.total_pnl > 0 %}text-success{% elif p.total_pnl < 0 %}text-danger{% else %}text-muted{% endif %}">
+                            {% if p.total_pnl > 0 %}+${{ p.total_pnl }}{% elif p.total_pnl < 0 %}-${{ p.abs_total_pnl }}{% else %}$0.00{% endif %}
+                        </td>
+                        <td class="fw-bold text-primary">${{ p.expectancy }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

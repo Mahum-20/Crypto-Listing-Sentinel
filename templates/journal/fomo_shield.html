@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block title %}Trading Psychology Audit | CoinIntel Journal{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col-md-8">
+        <h2 class="fw-bold text-dark mb-1">
+            <i class="bi bi-heart-pulse text-warning me-2"></i> Trading Psychology & Mindset Audit
+        </h2>
+        <p class="text-secondary mb-0">Understand emotional trading habits and protect your capital from FOMO and impulse trades.</p>
+    </div>
+    <div class="col-md-4 text-md-end mt-3 mt-md-0">
+        <a href="{% url 'trade_create' %}" class="btn btn-primary-clean py-2 px-3">+ Log Trade Mindset</a>
+    </div>
+</div>
+
+<!-- ================= FRIENDLY EMOTIONAL ALERT BANNER ================= -->
+{% if is_tilted %}
+    <div class="alert alert-danger card-clean border-0 border-start border-4 border-danger p-4 mb-4 shadow-sm bg-white">
+        <div class="d-flex align-items-start">
+            <i class="bi bi-exclamation-triangle-fill fs-2 text-danger me-3"></i>
+            <div>
+                <h5 class="fw-bold text-danger mb-1">Time for a Quick Break</h5>
+                <p class="text-secondary mb-2">We noticed <strong>{{ tilt_count }} recent trades</strong> were marked with emotional triggers (FOMO or revenge trading). Taking a short break is the best way to regain focus.</p>
+                <div class="p-3 bg-light rounded border text-secondary small">
+                    <strong class="text-dark"><i class="bi bi-pause-circle me-1"></i> Quick Tip:</strong> Take 30 to 60 minutes away from price charts. Review your trade plan rules before taking your next trade.
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="alert alert-success card-clean border-0 border-start border-4 border-success p-3 mb-4 shadow-sm bg-white">
+        <div class="d-flex align-items-center">
+            <i class="bi bi-check-circle-fill fs-3 text-success me-3"></i>
+            <div>
+                <h6 class="fw-bold text-success mb-0">Good Discipline Status</h6>
+                <span class="text-secondary small">Your trade executions are calm and compliant with your plan rules.</span>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<!-- ================= TOP STAT CARDS ================= -->
+<div class="row g-3 mb-4">
+    <!-- Psychological Efficiency % -->
+    <div class="col-md-4">
+        <div class="card card-clean p-4 text-center border-0 shadow-sm border-start border-4 border-warning h-100">
+            <span class="text-secondary small fw-medium">Disciplined Execution Rate</span>
+            <h2 class="fw-bold mb-0 mt-2 text-warning display-5">{{ psychological_efficiency }}%</h2>
+            <span class="text-muted small mt-2 d-block">Percentage of trades following plan</span>
+        </div>
+    </div>
+
+    <!-- Money Lost to Mistake Leaks -->
+    <div class="col-md-4">
+        <div class="card card-clean p-4 text-center border-0 shadow-sm border-start border-4 border-danger h-100">
+            <span class="text-secondary small fw-medium">Mistake Cost (Emotional Losses)</span>
+            <h2 class="fw-bold mb-0 mt-2 text-danger display-5">-${{ mistake_loss }}</h2>
+            <span class="text-muted small mt-2 d-block">Capital lost to FOMO & impulse trades</span>
+        </div>
+    </div>
+
+    <!-- Disciplined Trade Net PnL -->
+    <div class="col-md-4">
+        <div class="card card-clean p-4 text-center border-0 shadow-sm border-start border-4 border-success h-100">
+            <span class="text-secondary small fw-medium">Disciplined Trades Net Profit</span>
+            <h2 class="fw-bold mb-0 mt-2 text-success display-5">
+                {% if disciplined_pnl >= 0 %}+${{ disciplined_pnl }}{% else %}-${{ abs_disciplined_pnl }}{% endif %}
+            </h2>
+            <span class="text-muted small mt-2 d-block">Profit from planned executions</span>
+        </div>
+    </div>
+</div>
+
+<!-- ================= PSYCHOLOGY STATE BREAKDOWN TABLE ================= -->
+<div class="card card-clean p-4 border-0 shadow-sm">
+    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-pie-chart text-primary me-2"></i> Trade Mindset Breakdown</h5>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light text-secondary border-bottom">
+                <tr>
+                    <th>Mindset State</th>
+                    <th>Total Trades</th>
+                    <th>Win Rate (%)</th>
+                    <th>Net Profit / Loss ($)</th>
+                    <th>Average PnL</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in psychology_stats %}
+                    <tr>
+                        <td class="fw-bold text-dark">{{ item.label }}</td>
+                        <td>{{ item.count }}</td>
+                        <td class="fw-semibold text-primary">{{ item.win_rate }}%</td>
+                        <td class="fw-bold {% if item.pnl > 0 %}text-success{% elif item.pnl < 0 %}text-danger{% else %}text-muted{% endif %}">
+                            {% if item.pnl > 0 %}+${{ item.pnl }}{% elif item.pnl < 0 %}-${{ item.abs_pnl }}{% else %}$0.00{% endif %}
+                        </td>
+                        <td class="{% if item.avg_pnl > 0 %}text-success{% elif item.avg_pnl < 0 %}text-danger{% else %}text-muted{% endif %}">
+                            ${{ item.avg_pnl }}
+                        </td>
+                        <td>
+                            {% if item.code == 'DISCIPLINED' %}
+                                <span class="badge bg-success bg-opacity-10 text-success">Good Habit</span>
+                            {% elif item.pnl < 0 %}
+                                <span class="badge bg-danger bg-opacity-10 text-danger">Emotional Leak</span>
+                            {% else %}
+                                <span class="badge bg-secondary bg-opacity-10 text-secondary">Neutral</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
